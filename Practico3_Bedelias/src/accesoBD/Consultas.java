@@ -9,4 +9,8 @@ public class Consultas {
 	public String insertarResultado (){
 		return "INSERT INTO Resultados VALUES(?, ?, ?)";
 	}
+	
+	public String listarResultados () {
+		return "SELECT * FROM Resultados WHERE cedula = ?";
+	}
 }
