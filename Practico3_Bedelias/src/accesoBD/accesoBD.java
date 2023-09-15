@@ -30,6 +30,8 @@ public class accesoBD {
 					Examen examen = new Examen(rs.getString(1),rs.getString(2),rs.getString(3));
 					examenes.add(examen);
 				}
+				rs.close();
+				stmt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -55,8 +57,10 @@ public class accesoBD {
 				ptmt.setString(2, resu.getCodigo());
 				ptmt.setInt(3, resu.getCalificacion());
 				ptmt.executeUpdate();
+				ptmt.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
+//				e.printStackTrace();
+				System.out.print(e.getErrorCode()+" "+e.getMessage());
 			}
 			finalizoConeccion(con);
 		}
@@ -80,11 +84,12 @@ public class accesoBD {
 					Resultado r = new Resultado(rs.getInt(1),rs.getString(2),rs.getInt(3));
 					resu.add(r);
 				}
+				ptmt.close();
+				rs.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 			this.finalizoConeccion(con);
-
 		}else {
 			System.out.println("La conexion esta mal");
 		}
