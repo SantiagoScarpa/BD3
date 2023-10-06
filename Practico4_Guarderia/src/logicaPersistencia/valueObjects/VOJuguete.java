@@ -1,23 +1,19 @@
 package logicaPersistencia.valueObjects;
 
 public class VOJuguete {
-	private int numero;
+	
 	private String descripcion;
-	private int ccedulaNino;
-	public VOJuguete(int numero, String descripcion, int ccedulaNino) {
-		super();
-		this.numero = numero;
+	private int cedulaNino;
+	public VOJuguete( String descripcion, int cedulaNino) {
 		this.descripcion = descripcion;
-		this.ccedulaNino = ccedulaNino;
+		this.cedulaNino = cedulaNino;
 	}
-	public int getNumero() {
-		return numero;
-	}
+	
 	public String getDescripcion() {
 		return descripcion;
 	}
-	public int getCcedulaNino() {
-		return ccedulaNino;
+	public int getCedulaNino() {
+		return cedulaNino;
 	}
 	
 }

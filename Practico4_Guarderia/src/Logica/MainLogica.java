@@ -49,11 +49,11 @@ public class MainLogica {
 			query = "CREATE TABLE IF NOT EXISTS Ninos (cedula INT Primary Key, nombre VARCHAR(45), apellido VARCHAR(45))";
 			stmt.executeUpdate(query);
 
-			query = "CREATE TABLE IF NOT EXISTS Juguetes (numero INT, descripcion VARCHAR(45), cedulaNino int , PRIMARY KEY (numero, cedulaNino), CONSTRAINT fk_nino FOREIGN KEY (cedulaNino) REFERENCES Ninos(cedula))";
+			query = "CREATE TABLE IF NOT EXISTS Juguetes (numero INT, descripcion VARCHAR(45) NOT NULL, cedulaNino int , PRIMARY KEY (numero, cedulaNino), CONSTRAINT fk_nino FOREIGN KEY (cedulaNino) REFERENCES Ninos(cedula))";
 			stmt.executeUpdate(query);
 						
-			query = "INSERT INTO Ninos VALUES(1234567,'Kevin','McCallister'),(2345678,'Matilda','Wormwood'),(3456789,'Harry','Potter'),(4567890,'Merlina','Adams')";
-			stmt.executeUpdate(query);
+			//query = "INSERT INTO Ninos VALUES(1234567,'Kevin','McCallister'),(2345678,'Matilda','Wormwood'),(3456789,'Harry','Potter'),(4567890,'Merlina','Adams')";
+			//stmt.executeUpdate(query);
 			
 		}catch(SQLException | ClassNotFoundException e ) {
 			e.printStackTrace();
