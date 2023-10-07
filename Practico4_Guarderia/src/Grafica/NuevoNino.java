@@ -5,12 +5,20 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import Grafica.controladores.controladora;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 public class NuevoNino {
 
+	private controladora c;
+	
 	private JFrame frmNuevoNino;
 	private JTextField txt_cedula;
 	private JTextField txt_nombre;
@@ -90,5 +98,47 @@ public class NuevoNino {
 		JButton btn_aceptar = new JButton("ACEPTAR");
 		btn_aceptar.setBounds(234, 177, 117, 29);
 		frmNuevoNino.getContentPane().add(btn_aceptar);
+		btn_aceptar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				c.ingresoNuevoNino(txt_cedula.getText().trim(), txt_nombre.getText().trim(), txt_apellido.getText().trim());
+			}
+		});
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBounds(0, 0, 101, 22);
+		frmNuevoNino.getContentPane().add(menuBar);
+		
+		JMenu mnNinos = new JMenu("Ninos");
+		menuBar.add(mnNinos);
+		
+		JMenuItem mniNinoNuevo = new JMenuItem("Nuevo Nino");
+		mnNinos.add(mniNinoNuevo);
+		mniNinoNuevo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				c.mostrarNuevoNino();
+			}
+		});;
+		
+		JMenu mnJuguete = new JMenu("Juguetes");
+		menuBar.add(mnJuguete);
+		
+		
+		JMenuItem mniNuevoJuguete = new JMenuItem("Nuevo Juguete");
+		mnJuguete.add(mniNuevoJuguete);
+		mniNuevoJuguete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				c.mostrarNuevoJuguete();
+			}
+		});;
+	}
+	public void setControladora(controladora con) {
+		c = con;
+	}
+	public void salir() {
+		frmNuevoNino.dispose();
+	}
+	
+	public void setVisible(boolean b) {
+		frmNuevoNino.setVisible(b);
 	}
 }

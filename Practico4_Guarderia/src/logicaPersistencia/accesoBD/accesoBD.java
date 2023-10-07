@@ -24,14 +24,18 @@ public class accesoBD {
 		Consultas consu = new Consultas();
 		String query = consu.existeNino();
 		try {
+			System.out.print("accesoDB1");
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, ci);
+			System.out.print("accesoDB2");
 			ResultSet rs = pstmt.executeQuery();
+			System.out.print("accesoDB3");
 			if(rs.next())
 				existe = true;
 			rs.close();
 			pstmt.close();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			// TODO Auto-generated catch block
 			throw new ExcepcionPersistencia("Error al acceder a los datos");
 		}
@@ -46,10 +50,8 @@ public class accesoBD {
 			pstmt.setInt(1, n.getCedula());
 			pstmt.setString(2, n.getNombre());
 			pstmt.setString(3, n.getApellido());
-			System.out.println("aaa");
 			pstmt.executeUpdate();
 			pstmt.close();
-			System.out.println("bbb");
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

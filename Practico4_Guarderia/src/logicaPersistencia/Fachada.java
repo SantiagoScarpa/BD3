@@ -46,7 +46,7 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 		try {
 			prop.load(new FileInputStream(nomArch));
 			driver 	= prop.getProperty("driver");
-			url 	= prop.getProperty("url");
+			url 	= prop.getProperty("urlBD");
 			usuario = prop.getProperty("usuario");
 			pass 	= prop.getProperty("password");
 		} catch (IOException e) {
@@ -58,7 +58,6 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 		try {
 			Class.forName(driver);
 			con = DriverManager.getConnection(url,usuario, pass);
-			System.out.println("Fachada:: crearConeccion");
 		} catch (ClassNotFoundException e ) {
 			throw new ExcepcionGenerica("Error al conectarse a los datos");
 		}catch(SQLException e) {
@@ -80,14 +79,10 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 	}
 
 	public void nuevoNino(VONino vNino)throws RemoteException, ExcepcionGenerica,ExcepcionPersistencia, ExcepcionNino {
-		System.out.println("fachada1");
 		accesoBD acc = new accesoBD();
 		Connection con = crearConeccion();
-		System.out.println("fachada2=="+vNino.getCedula());
 		if(!acc.existeNino(con, vNino.getCedula())) {
-			System.out.println("fachada3");
 			acc.nuevoNino(con, vNino);
-			System.out.println("fachada4");
 		}
 		else
 			throw new ExcepcionNino("Nino ya existe en el sistema");

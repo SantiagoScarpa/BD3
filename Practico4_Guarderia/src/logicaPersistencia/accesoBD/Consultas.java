@@ -15,11 +15,11 @@ public class Consultas {
 		también elimina a todos sus juguetes, chequeando que el niño esté registrado
  * */
 	public String insertoNino() {
-		return "INSERT INTO Nino VALUES(?,?,?)";
+		return "INSERT INTO Ninos VALUES(?,?,?)";
 	}
 	
 	public String existeNino() {
-		return "SELECT * FROM Nino WHERE cedula = ?";
+		return "SELECT * FROM Ninos WHERE cedula = ?";
 	}
 	
 	public String insertoJuguete() {
@@ -31,7 +31,7 @@ public class Consultas {
 	}
 	
 	public String listoNino() {
-		return "SELECT * FROM Nino ORDER BY cedula";
+		return "SELECT * FROM Ninos ORDER BY cedula";
 	}
 	
 	public String listoJuguete() {

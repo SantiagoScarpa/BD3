@@ -11,6 +11,7 @@ import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
+import Grafica.NuevoNino;
 import Grafica.ventanas.nuevoJuguete;
 import Grafica.ventanas.nuevoNino;
 import logicaPersistencia.IFachada;
@@ -21,7 +22,7 @@ import logicaPersistencia.valueObjects.VONino;
 
 public class controladora {
 	private IFachada fachada;
-	private nuevoNino winNuevoNino;
+	private NuevoNino winNuevoNino;
 	private nuevoJuguete winNuevoJuguete;
 	
 	public controladora() throws ExcepcionPersistencia, ExcepcionGenerica {
@@ -43,7 +44,7 @@ public class controladora {
 			String path = "//" + ip.trim() + ":" + port.trim() + "/practico4";
 			fachada = (IFachada) Naming.lookup(path);
 
-			winNuevoNino = new nuevoNino();
+			winNuevoNino = new NuevoNino();
 			winNuevoNino.setControladora(this);
 			winNuevoNino.setVisible(true);
 			
@@ -78,7 +79,7 @@ public class controladora {
 		
 		try {
 			fachada.nuevoNino(vNino);
-			JOptionPane.showMessageDialog (null, "Nino creado", "Ha ocurrido un error", JOptionPane.OK_OPTION);
+			JOptionPane.showMessageDialog (null, "Nino creado", "Peticion realizada", JOptionPane.INFORMATION_MESSAGE);
 		} catch ( ExcepcionGenerica  e) {
 			// e.printStackTrace();
 			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
