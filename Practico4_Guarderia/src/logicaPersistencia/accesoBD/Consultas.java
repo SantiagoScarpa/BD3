@@ -23,11 +23,11 @@ public class Consultas {
 	}
 	
 	public String insertoJuguete() {
-		return "INSERT  INTO Juguete VALUES(?,?,?)";
+		return "INSERT  INTO Juguetes VALUES(?,?,?)";
 	}
 
 	public String obtengoNumJuguete() {
-		return "SELECT max(numero) FROM Juguete WHERE cedulaNino = ?";
+		return "SELECT max(numero) FROM Juguetes WHERE cedulaNino = ?";
 	}
 	
 	public String listoNino() {
@@ -35,11 +35,11 @@ public class Consultas {
 	}
 	
 	public String listoJuguete() {
-		return "SELECT * FROM Juguete WHERE cedulaNino = ? ORDER BY numero";
+		return "SELECT * FROM Juguetes WHERE cedulaNino = ? ORDER BY numero";
 	}
 	
 	public String descripcionJuguete() {
-		return "SELECT descripcion FROM Juguete WHERE cedulaNino = ? AND numero = ?";
+		return "SELECT descripcion FROM Juguetes WHERE cedulaNino = ? AND numero = ?";
 	}
 	
 	public String borrarNino() {

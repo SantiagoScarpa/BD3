@@ -34,11 +34,11 @@ public class accesoBD {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			// TODO Auto-generated catch block
-			throw new ExcepcionPersistencia("Error al acceder a los datos");
+			throw new ExcepcionPersistencia("Error al acceder a los datos 01");
 		}
 		return existe;
 	}
-	
+
 	public void nuevoNino(Connection con, VONino n) throws ExcepcionPersistencia {
 		Consultas consu = new Consultas();
 		String query = consu.insertoNino();
@@ -51,8 +51,7 @@ public class accesoBD {
 			pstmt.close();
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new ExcepcionPersistencia("Error al acceder a los datos");
+			throw new ExcepcionPersistencia("Error al acceder a los datos 02");
 		}
 	}
 	
@@ -69,15 +68,14 @@ public class accesoBD {
 			rs.close();
 			pstmt.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			throw new ExcepcionPersistencia("Error al acceder a los datos");
+			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
 		}
 		return num;
 	}
 	
 	public void nuevoJuguete(Connection con, VOJuguete2 j)throws ExcepcionPersistencia  {
 		Consultas consu = new Consultas();
-		String query = consu.insertoNino();
+		String query = consu.insertoJuguete();
 		try {
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1,j.getNumero());
@@ -87,7 +85,7 @@ public class accesoBD {
 			pstmt.close();
 			
 		} catch (SQLException e) {
-			throw new ExcepcionPersistencia("Error al acceder a los datos");
+			throw new ExcepcionPersistencia("Error al acceder a los datos 04");
 		}
 	}
 	
@@ -105,7 +103,7 @@ public class accesoBD {
 			rs.close();
 			stmt.close();
 		}catch(SQLException e) {
-			throw new ExcepcionPersistencia("Error al acceder a los datos");
+			throw new ExcepcionPersistencia("Error al acceder a los datos 05");
 		}
 		
 		return listaN;
@@ -127,7 +125,7 @@ public class accesoBD {
 			rs.close();
 			pstmt.close();
 		}catch(SQLException e) {
-			throw new ExcepcionPersistencia("Error al acceder a los datos");
+			throw new ExcepcionPersistencia("Error al acceder a los datos 06");
 		}
 		
 		return listaJ;
@@ -149,7 +147,7 @@ public class accesoBD {
 			rs.close();
 			pstmt.close();
 		}catch(SQLException e) {
-			throw new ExcepcionPersistencia("Problema de acceso a los datos");
+			throw new ExcepcionPersistencia("Problema de acceso a los datos 07");
 		}
 		return desc;
 	}
@@ -163,7 +161,7 @@ public class accesoBD {
 			pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
-			throw new ExcepcionPersistencia("Error al acceder a los datos");
+			throw new ExcepcionPersistencia("Error al acceder a los datos 08");
 		}
 	}
 	
@@ -176,7 +174,7 @@ public class accesoBD {
 			pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
-			throw new ExcepcionPersistencia("Error al acceder a los datos");
+			throw new ExcepcionPersistencia("Error al acceder a los datos 09");
 		}
 	}
 	
