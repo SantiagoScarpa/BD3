@@ -46,9 +46,13 @@ public class accesoBD {
 			pstmt.setInt(1, n.getCedula());
 			pstmt.setString(2, n.getNombre());
 			pstmt.setString(3, n.getApellido());
+			System.out.println("aaa");
 			pstmt.executeUpdate();
 			pstmt.close();
+			System.out.println("bbb");
+			
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new ExcepcionPersistencia("Error al acceder a los datos");
 		}
 	}

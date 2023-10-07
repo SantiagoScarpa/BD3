@@ -1,6 +1,10 @@
 package logicaPersistencia.valueObjects;
 
-public class VONino {
+import java.io.Serializable;
+
+public class VONino  implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private int cedula ;
 	private String nombre ;
 	private  String apellido;

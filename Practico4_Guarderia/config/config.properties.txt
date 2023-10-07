@@ -2,3 +2,5 @@ driver		= com.mysql.jdbc.Driver
 url 		= jdbc:mysql://localhost:3308
 usuario 	= root
 password	= root
+ip 			= localhost
+port		= 81

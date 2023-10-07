@@ -2,6 +2,9 @@ package logicaPersistencia;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -18,8 +21,20 @@ import logicaPersistencia.valueObjects.VOJuguete;
 import logicaPersistencia.valueObjects.VOJuguete2;
 import logicaPersistencia.valueObjects.VONino;
 
-public class Fachada {
+public class Fachada extends UnicastRemoteObject implements IFachada {
+	private static Fachada instancia;
+	
+	private Fachada() throws RemoteException {
 		
+	}
+		
+	public static Fachada getInstancia () throws RemoteException, ExcepcionPersistencia, ExcepcionGenerica {
+		if (instancia == null) {
+				instancia = new Fachada();
+		}
+		return instancia;
+	}
+
 	private Connection crearConeccion() throws ExcepcionPersistencia, ExcepcionGenerica{
 		Connection con = null;
 		Properties prop = new Properties();
@@ -43,6 +58,7 @@ public class Fachada {
 		try {
 			Class.forName(driver);
 			con = DriverManager.getConnection(url,usuario, pass);
+			System.out.println("Fachada:: crearConeccion");
 		} catch (ClassNotFoundException e ) {
 			throw new ExcepcionGenerica("Error al conectarse a los datos");
 		}catch(SQLException e) {
@@ -63,21 +79,23 @@ public class Fachada {
 		}
 	}
 
-	public Fachada() {
-		
-	}
-	public void nuevoNino(VONino vNino)throws ExcepcionGenerica,ExcepcionPersistencia, ExcepcionNino {
+	public void nuevoNino(VONino vNino)throws RemoteException, ExcepcionGenerica,ExcepcionPersistencia, ExcepcionNino {
+		System.out.println("fachada1");
 		accesoBD acc = new accesoBD();
 		Connection con = crearConeccion();
-		if(!acc.existeNino(con, vNino.getCedula()))
+		System.out.println("fachada2=="+vNino.getCedula());
+		if(!acc.existeNino(con, vNino.getCedula())) {
+			System.out.println("fachada3");
 			acc.nuevoNino(con, vNino);
+			System.out.println("fachada4");
+		}
 		else
 			throw new ExcepcionNino("Nino ya existe en el sistema");
 
 		finalizoConeccion(con);
 	}
 	
-	public void nuevoJuguete(String desc, VOJuguete vJuguete)throws ExcepcionGenerica,ExcepcionPersistencia, ExcepcionNino {
+	public void nuevoJuguete(String desc, VOJuguete vJuguete)throws RemoteException, ExcepcionGenerica,ExcepcionPersistencia, ExcepcionNino {
 		accesoBD acc = new accesoBD();
 		Connection con = crearConeccion();
 		int ci = vJuguete.getCedulaNino();
@@ -92,7 +110,7 @@ public class Fachada {
 		finalizoConeccion(con);
 	}
 	
-	public List<VONino> listarNinos() throws ExcepcionPersistencia, ExcepcionGenerica{
+	public List<VONino> listarNinos() throws RemoteException, ExcepcionPersistencia, ExcepcionGenerica{
 		List<VONino> lista = new ArrayList<VONino>();
 		accesoBD acc = new accesoBD();
 		Connection con = crearConeccion();
@@ -101,7 +119,7 @@ public class Fachada {
 		return lista;
 	}
 	
-	public List<VOJuguete2> listarJuguetes(int ci) throws ExcepcionPersistencia, ExcepcionGenerica, ExcepcionNino{
+	public List<VOJuguete2> listarJuguetes(int ci) throws  RemoteException, ExcepcionPersistencia, ExcepcionGenerica, ExcepcionNino{
 		List<VOJuguete2> lista = new ArrayList<VOJuguete2>();
 		accesoBD acc = new accesoBD();
 		Connection con = crearConeccion();
@@ -116,7 +134,7 @@ public class Fachada {
 		
 	}
 	
-	public String darDescripcion(int ci, int num) throws ExcepcionPersistencia, ExcepcionGenerica, ExcepcionNino, ExcepcionJuguete {
+	public String darDescripcion(int ci, int num) throws RemoteException, ExcepcionPersistencia, ExcepcionGenerica, ExcepcionNino, ExcepcionJuguete {
 		String desc = null;
 		accesoBD acc = new accesoBD();
 		Connection con = crearConeccion();
@@ -132,7 +150,7 @@ public class Fachada {
 		return desc;
 	}
 	
-	public void borrarNinoJuguetes(int ci) throws ExcepcionNino, ExcepcionPersistencia, ExcepcionGenerica {
+	public void borrarNinoJuguetes(int ci) throws RemoteException, ExcepcionNino, ExcepcionPersistencia, ExcepcionGenerica {
 		accesoBD acc = new accesoBD();
 		Connection con = crearConeccion();
 		if(acc.existeNino(con, ci)) {
