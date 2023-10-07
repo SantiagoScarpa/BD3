@@ -17,7 +17,7 @@ public interface IFachada extends Remote{
 	
 	public void nuevoNino(VONino vNino)throws ExcepcionGenerica,ExcepcionPersistencia, ExcepcionNino, RemoteException ;
 	
-	public void nuevoJuguete(String desc, VOJuguete vJuguete)throws RemoteException,  ExcepcionGenerica,ExcepcionPersistencia, ExcepcionNino ;
+	public void nuevoJuguete( VOJuguete vJuguete)throws RemoteException,  ExcepcionGenerica,ExcepcionPersistencia, ExcepcionNino ;
 	
 	public List<VONino> listarNinos() throws RemoteException, ExcepcionPersistencia, ExcepcionGenerica;
 	

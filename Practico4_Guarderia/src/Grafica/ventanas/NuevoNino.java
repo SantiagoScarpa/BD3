@@ -1,4 +1,4 @@
-package Grafica;
+package Grafica.ventanas;
 
 import java.awt.EventQueue;
 

@@ -1,17 +1,21 @@
-package Grafica;
+package Grafica.ventanas;
 
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
+import Grafica.controladores.controladora;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class NuevoJuguete {
+	private controladora c;
 
-	private JFrame frmNuevoNino;
+	private JFrame frmNuevoJuguete;
 	private JTextField txt_desc;
 	private JTextField txt_cedulaNino;
 
@@ -23,7 +27,7 @@ public class NuevoJuguete {
 			public void run() {
 				try {
 					NuevoJuguete window = new NuevoJuguete();
-					window.frmNuevoNino.setVisible(true);
+					window.frmNuevoJuguete.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -42,28 +46,28 @@ public class NuevoJuguete {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmNuevoNino = new JFrame();
-		frmNuevoNino.setTitle("NUEVO JUGUETE");
-		frmNuevoNino.setBounds(100, 100, 450, 300);
-		frmNuevoNino.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frmNuevoNino.getContentPane().setLayout(null);
+		frmNuevoJuguete = new JFrame();
+		frmNuevoJuguete.setTitle("NUEVO JUGUETE");
+		frmNuevoJuguete.setBounds(100, 100, 450, 300);
+		frmNuevoJuguete.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmNuevoJuguete.getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel_1 = new JLabel("DESCRIPCION");
 		lblNewLabel_1.setBounds(66, 45, 93, 16);
-		frmNuevoNino.getContentPane().add(lblNewLabel_1);
+		frmNuevoJuguete.getContentPane().add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("CEDULA NIÑO");
 		lblNewLabel_2.setBounds(66, 87, 93, 16);
-		frmNuevoNino.getContentPane().add(lblNewLabel_2);
+		frmNuevoJuguete.getContentPane().add(lblNewLabel_2);
 		
 		txt_desc = new JTextField();
 		txt_desc.setBounds(171, 40, 200, 26);
-		frmNuevoNino.getContentPane().add(txt_desc);
+		frmNuevoJuguete.getContentPane().add(txt_desc);
 		txt_desc.setColumns(10);
 		
 		txt_cedulaNino = new JTextField();
 		txt_cedulaNino.setBounds(171, 82, 200, 26);
-		frmNuevoNino.getContentPane().add(txt_cedulaNino);
+		frmNuevoJuguete.getContentPane().add(txt_cedulaNino);
 		txt_cedulaNino.setColumns(10);
 		
 		JButton btn_limpiar = new JButton("LIMPIAR");
@@ -74,10 +78,28 @@ public class NuevoJuguete {
 			}
 		});
 		btn_limpiar.setBounds(71, 177, 117, 29);
-		frmNuevoNino.getContentPane().add(btn_limpiar);
+		frmNuevoJuguete.getContentPane().add(btn_limpiar);
 		
 		JButton btn_aceptar = new JButton("ACEPTAR");
 		btn_aceptar.setBounds(234, 177, 117, 29);
-		frmNuevoNino.getContentPane().add(btn_aceptar);
+		frmNuevoJuguete.getContentPane().add(btn_aceptar);
+		btn_aceptar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				c.ingresoNuevoJuguete(txt_desc.getText().trim(), txt_cedulaNino.getText().trim());
+			}
+
+		});
+	}
+	
+
+	public void setControladora(controladora con) {
+		c = con;
+	}
+	public void salir() {
+		frmNuevoJuguete.dispose();
+	}
+	
+	public void setVisible(boolean b) {
+		frmNuevoJuguete.setVisible(b);
 	}
 }

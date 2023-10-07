@@ -24,12 +24,9 @@ public class accesoBD {
 		Consultas consu = new Consultas();
 		String query = consu.existeNino();
 		try {
-			System.out.print("accesoDB1");
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, ci);
-			System.out.print("accesoDB2");
 			ResultSet rs = pstmt.executeQuery();
-			System.out.print("accesoDB3");
 			if(rs.next())
 				existe = true;
 			rs.close();

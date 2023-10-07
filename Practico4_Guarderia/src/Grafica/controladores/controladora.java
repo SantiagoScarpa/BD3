@@ -6,24 +6,23 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
 import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
-import Grafica.NuevoNino;
-import Grafica.ventanas.nuevoJuguete;
-import Grafica.ventanas.nuevoNino;
+import Grafica.ventanas.NuevoJuguete;
+import Grafica.ventanas.NuevoNino;
 import logicaPersistencia.IFachada;
 import logicaPersistencia.excepciones.ExcepcionGenerica;
 import logicaPersistencia.excepciones.ExcepcionNino;
 import logicaPersistencia.excepciones.ExcepcionPersistencia;
+import logicaPersistencia.valueObjects.VOJuguete;
 import logicaPersistencia.valueObjects.VONino;
 
 public class controladora {
 	private IFachada fachada;
 	private NuevoNino winNuevoNino;
-	private nuevoJuguete winNuevoJuguete;
+	private NuevoJuguete winNuevoJuguete;
 	
 	public controladora() throws ExcepcionPersistencia, ExcepcionGenerica {
 		try {
@@ -48,7 +47,7 @@ public class controladora {
 			winNuevoNino.setControladora(this);
 			winNuevoNino.setVisible(true);
 			
-			winNuevoJuguete = new nuevoJuguete();
+			winNuevoJuguete = new NuevoJuguete();
 			winNuevoJuguete.setControladora(this);
 			winNuevoJuguete.setVisible(false);
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
@@ -74,12 +73,12 @@ public class controladora {
 	}
 	
 	public void ingresoNuevoNino(String ciStr, String nom, String ape) {
-		int ci = Integer.parseInt(ciStr);
-		VONino vNino = new VONino(ci,nom,ape);
-		
+			
 		try {
+			int ci = Integer.parseInt(ciStr);
+			VONino vNino = new VONino(ci,nom,ape);
 			fachada.nuevoNino(vNino);
-			JOptionPane.showMessageDialog (null, "Nino creado", "Peticion realizada", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog (null, "Nino creado", "Peticion realizada", JOptionPane.INFORMATION_MESSAGE);	
 		} catch ( ExcepcionGenerica  e) {
 			// e.printStackTrace();
 			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
@@ -90,6 +89,31 @@ public class controladora {
 			JOptionPane.showMessageDialog (null, e1.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		}catch(ExcepcionNino e3) {
 			JOptionPane.showMessageDialog (null, e3.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		}catch(NumberFormatException e4) {
+			JOptionPane.showMessageDialog (null, "CI debe tener un valor numerico","Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	public void ingresoNuevoJuguete(String desc, String ciStr) {
+		try {
+			int ci = Integer.parseInt(ciStr);
+			VOJuguete vJuguete = new VOJuguete(desc, ci);
+			fachada.nuevoJuguete(vJuguete);
+			JOptionPane.showMessageDialog (null, "Juguete creado", "Peticion realizada", JOptionPane.OK_OPTION);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExcepcionGenerica e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		} catch (ExcepcionPersistencia e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		} catch (ExcepcionNino e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		}catch(NumberFormatException e4) {
+			JOptionPane.showMessageDialog (null, "CI debe tener un valor numerico","Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }

@@ -90,7 +90,7 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 		finalizoConeccion(con);
 	}
 	
-	public void nuevoJuguete(String desc, VOJuguete vJuguete)throws RemoteException, ExcepcionGenerica,ExcepcionPersistencia, ExcepcionNino {
+	public void nuevoJuguete(VOJuguete vJuguete)throws RemoteException, ExcepcionGenerica,ExcepcionPersistencia, ExcepcionNino {
 		accesoBD acc = new accesoBD();
 		Connection con = crearConeccion();
 		int ci = vJuguete.getCedulaNino();
@@ -104,7 +104,7 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 
 		finalizoConeccion(con);
 	}
-	
+
 	public List<VONino> listarNinos() throws RemoteException, ExcepcionPersistencia, ExcepcionGenerica{
 		List<VONino> lista = new ArrayList<VONino>();
 		accesoBD acc = new accesoBD();
