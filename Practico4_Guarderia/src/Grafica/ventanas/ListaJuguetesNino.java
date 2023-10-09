@@ -5,8 +5,6 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 
 import Grafica.controladores.controladora;
@@ -16,13 +14,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class ListaJuguetesNino {
+	
 	private controladora c;
 
-	private JFrame frmListaJugete;
+	private JFrame frmListaJuguetes;
 	private JTextField txt_cedulaNino;
 	private JScrollPane scl_lista;
 
@@ -34,7 +36,7 @@ public class ListaJuguetesNino {
 			public void run() {
 				try {
 					ListaJuguetesNino window = new ListaJuguetesNino();
-					window.frmListaJugete.setVisible(true);
+					window.frmListaJuguetes.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -53,51 +55,27 @@ public class ListaJuguetesNino {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frmListaJugete = new JFrame();
-		frmListaJugete.setTitle("LISTA JUGUETES DE NIÑO");
-		frmListaJugete.setBounds(100, 100, 450, 300);
-		frmListaJugete.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		frmListaJuguetes = new JFrame();
+		frmListaJuguetes.setTitle("LISTA JUGUETES DE NIÑO");
+		frmListaJuguetes.setBounds(100, 100, 450, 310);
+		frmListaJuguetes.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		JButton btn_listar = new JButton("LISTAR");
-
+		btn_listar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				c.cargoListaJuguetes(txt_cedulaNino.getText().trim());
+			}
+		});
+		
 		scl_lista = new JScrollPane();
-
+		
 		JLabel lblNewLabel = new JLabel("CELULA NIÑO");
-
+		
 		txt_cedulaNino = new JTextField();
 		txt_cedulaNino.setColumns(10);
-		GroupLayout groupLayout = new GroupLayout(frmListaJugete.getContentPane());
-		groupLayout.setHorizontalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-						.addGap(6)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createSequentialGroup()
-										.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
-										.addGap(12)
-										.addComponent(txt_cedulaNino, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-										.addGap(12)
-										.addComponent(btn_listar, GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))
-								.addComponent(scl_lista, GroupLayout.DEFAULT_SIZE, 438, Short.MAX_VALUE)))
-				);
-		groupLayout.setVerticalGroup(
-				groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-						.addGap(6)
-						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createSequentialGroup()
-										.addGap(5)
-										.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE))
-								.addComponent(txt_cedulaNino, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btn_listar, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
-						.addGap(4)
-						.addComponent(scl_lista, GroupLayout.PREFERRED_SIZE, 227, GroupLayout.PREFERRED_SIZE))
-				);
-		frmListaJugete.getContentPane().setLayout(groupLayout);
-
-		// MENU
+		
 		JMenuBar menuBar = new JMenuBar();
-
+		
 		JMenu mnNinos = new JMenu("Ninos");
 		menuBar.add(mnNinos);
 
@@ -145,40 +123,54 @@ public class ListaJuguetesNino {
 				c.mostrarListaNino();
 			}
 		});
-
+		
 		JMenuItem mniListaJuguete = new JMenuItem("Lista Juguetes");
 		mnListas.add(mniListaJuguete);
-		GroupLayout groupLayout1 = new GroupLayout(frmListaJugete.getContentPane());
-		groupLayout1.setHorizontalGroup(
-				groupLayout1.createParallelGroup(Alignment.LEADING)
-				.addComponent(menuBar, GroupLayout.DEFAULT_SIZE, 417, Short.MAX_VALUE)
-				.addGroup(groupLayout1.createSequentialGroup()
-						.addGap(3)
-						.addGroup(groupLayout1.createParallelGroup(Alignment.LEADING)
-								.addComponent(scl_lista, GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)))
-				);
-		groupLayout1.setVerticalGroup(
-				groupLayout1.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout1.createSequentialGroup()
-						.addGroup(groupLayout1.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout1.createSequentialGroup()
-										.addComponent(menuBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(219)
-										)
-								.addGroup(groupLayout1.createSequentialGroup()
-										.addGap(25)
-										.addComponent(scl_lista, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)))
-						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				);
-//		frmListaNino.getContentPane().setLayout(groupLayout);
 		mniListaJuguete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				c.mostrarListaJuguete();
 			}
 		});
+		
 		// FIN MENU
-	}
+		GroupLayout groupLayout = new GroupLayout(frmListaJuguetes.getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(6)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+							.addGap(4)
+							.addComponent(txt_cedulaNino, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+							.addGap(4)
+							.addComponent(btn_listar, GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE))
+						.addComponent(menuBar, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE))
+					.addContainerGap())
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(5)
+					.addComponent(scl_lista, GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE)
+					.addGap(5))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addComponent(menuBar, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txt_cedulaNino, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btn_listar, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+					.addGap(2)
+					.addComponent(scl_lista, GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
+					.addContainerGap())
+		);
+		frmListaJuguetes.getContentPane().setLayout(groupLayout);
+		
 
+				
+	}
+	
 	public void cargarTabla(JTable tblTabla) {
 		tblTabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		int ancho = 413/tblTabla.getColumnCount();
@@ -191,5 +183,17 @@ public class ListaJuguetesNino {
 		scl_lista.setViewportView(tblTabla);
 		tblTabla.setEnabled(false);
 	}
-
+	
+	
+	//METODOS GENERALES
+		public void setControladora(controladora con) {
+			c = con;
+		}
+		public void salir() {
+			frmListaJuguetes.dispose();
+		}
+		
+		public void setVisible(boolean b) {
+			frmListaJuguetes.setVisible(b);
+		}
 }

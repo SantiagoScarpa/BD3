@@ -117,8 +117,17 @@ public class ListaNinos {
 			}
 		});
 
+
 		JMenuItem mniListaJuguete = new JMenuItem("Lista Juguetes");
 		mnListas.add(mniListaJuguete);
+		mniListaJuguete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				c.mostrarListaJuguete();
+			}
+		});
+		
+		// FIN MENU
+		
 		GroupLayout groupLayout = new GroupLayout(frmListaNino.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -143,12 +152,7 @@ public class ListaNinos {
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		frmListaNino.getContentPane().setLayout(groupLayout);
-		mniListaJuguete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				c.mostrarListaJuguete();
-			}
-		});
-		// FIN MENU
+		
 		
 	}
 	

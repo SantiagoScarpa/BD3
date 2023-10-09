@@ -16,15 +16,17 @@ import javax.swing.table.DefaultTableModel;
 
 import Grafica.BorrarNino;
 import Grafica.DescripcionJuguete;
-import Grafica.ListaJuguetesNino;
+import Grafica.ventanas.ListaJuguetesNino;
 import Grafica.ventanas.ListaNinos;
 import Grafica.ventanas.NuevoJuguete;
 import Grafica.ventanas.NuevoNino;
 import logicaPersistencia.IFachada;
 import logicaPersistencia.excepciones.ExcepcionGenerica;
+import logicaPersistencia.excepciones.ExcepcionJuguete;
 import logicaPersistencia.excepciones.ExcepcionNino;
 import logicaPersistencia.excepciones.ExcepcionPersistencia;
 import logicaPersistencia.valueObjects.VOJuguete;
+import logicaPersistencia.valueObjects.VOJuguete2;
 import logicaPersistencia.valueObjects.VONino;
 
 public class controladora {
@@ -34,7 +36,7 @@ public class controladora {
 	private ListaNinos winListaNinos;
 	private BorrarNino winBorrarNino;
 	private DescripcionJuguete winDescJuguete;
-	private ListaJuguetesNino winListaJugete;
+	private ListaJuguetesNino winListaJuguete;
 	
 	public controladora() throws ExcepcionPersistencia, ExcepcionGenerica {
 		try {
@@ -66,12 +68,16 @@ public class controladora {
 			winListaNinos = new ListaNinos();
 			winListaNinos.setControladora(this);
 			winListaNinos.setVisible(false);
+			
+			winListaJuguete = new ListaJuguetesNino();
+			winListaJuguete.setControladora(this);
+			winListaJuguete.setVisible(false);
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			throw new ExcepcionGenerica("Error de conexión al servidor, contacte al administrador ");
 		}
 	}
 	
-	
+	//MANEJO VENTANAS
 	public void mostrarNuevoNino() {
 		cierroVentanas();
 		winNuevoNino.setVisible(true);
@@ -88,23 +94,7 @@ public class controladora {
 		winListaNinos.setVisible(true);
 	}
 	
-	public void cargoListaNino() {
-		try {
-			List<VONino> lista = new ArrayList<VONino>();
-			lista = fachada.listarNinos();
-			String[] colMedHdr = { "CEDULA","NOMBRE","APELLIDO"};
-			DefaultTableModel tblModel = new DefaultTableModel(colMedHdr, 0);
-			JTable tblMen = new JTable(tblModel);
-			for (VONino j : lista) {
-				Object[] data = { j.getCedula(), j.getNombre(),j.getApellido()};
-				tblModel.addRow(data);
-			}
-			winListaNinos.cargarTabla(tblMen);
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
+
 	public void mostrarBorrarNino() {
 		
 	}
@@ -114,15 +104,19 @@ public class controladora {
 	}
 	
 	public void mostrarListaJuguete() {
-		
+		cierroVentanas();
+		winListaJuguete.setVisible(true);
 	}
 	
 	private void cierroVentanas() {
 		winNuevoNino.salir();
 		winNuevoJuguete.salir();
 		winListaNinos.salir();
+		winListaJuguete.salir();
 	}
 	
+	
+	//METODOS DE FUNCIONALIDADES
 	public void ingresoNuevoNino(String ciStr, String nom, String ape) {
 			
 		try {
@@ -152,8 +146,7 @@ public class controladora {
 			fachada.nuevoJuguete(vJuguete);
 			JOptionPane.showMessageDialog (null, "Juguete creado", "Peticion realizada", JOptionPane.INFORMATION_MESSAGE);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog (null, "Error al conectar al servidor, contacte al administrador","Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		} catch (ExcepcionGenerica e) {
 			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
@@ -167,4 +160,58 @@ public class controladora {
 			JOptionPane.showMessageDialog (null, "CI debe tener un valor numerico","Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
+	
+	public void cargoListaNino() {
+		try {
+			List<VONino> lista = new ArrayList<VONino>();
+			lista = fachada.listarNinos();
+			String[] colMedHdr = { "CEDULA","NOMBRE","APELLIDO"};
+			DefaultTableModel tblModel = new DefaultTableModel(colMedHdr, 0);
+			JTable tblMen = new JTable(tblModel);
+			for (VONino j : lista) {
+				Object[] data = { j.getCedula(), j.getNombre(),j.getApellido()};
+				tblModel.addRow(data);
+			}
+			winListaNinos.cargarTabla(tblMen);
+		}catch (ExcepcionGenerica e) {
+			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		}catch (RemoteException e) {
+			JOptionPane.showMessageDialog (null, "Error al conectar al servidor, contacte al administrador","Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		} catch (ExcepcionPersistencia e) {
+			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	public void cargoListaJuguetes(String ciStr) {
+		try {
+			int ci = Integer.parseInt(ciStr);
+			List<VOJuguete2> lista = new ArrayList<VOJuguete2>();
+			lista = fachada.listarJuguetes(ci);
+			String[] colMedHdr = { "NUMERO","DESCRIPCION","DUENO"};
+			DefaultTableModel tblModel = new DefaultTableModel(colMedHdr, 0);
+			JTable tblMen = new JTable(tblModel);
+			for (VOJuguete2 j : lista) {
+				//en teoria no tendriamos porque mostrar la CI del niño ya que estas buscando por el mismo
+				//pero si no lo ponemos estariamos incumpliando en la funcionalidad del VO y deberiamos crear otro nuevo
+				//como solo es un ejercicio de practico no vamos a crear uno nuevo.... asi que lo muestro 
+				Object[] data = { j.getNumero(), j.getDescripcion(),j.getCedulaNino()};
+				tblModel.addRow(data);
+			}
+			if(lista.isEmpty())
+				JOptionPane.showMessageDialog (null, "No hay juguetes asignado a la ci","Ha ocurrido un error", JOptionPane.INFORMATION_MESSAGE);
+
+			winListaJuguete.cargarTabla(tblMen);
+		}catch (ExcepcionGenerica e) {
+			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		}catch (RemoteException e) {
+			JOptionPane.showMessageDialog (null, "Error al conectar al servidor, contacte al administrador","Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		} catch (ExcepcionPersistencia e) {
+			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		}catch(NumberFormatException e4) {
+			JOptionPane.showMessageDialog (null, "CI debe tener un valor numerico","Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		}catch (ExcepcionNino e) {
+			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
 }
