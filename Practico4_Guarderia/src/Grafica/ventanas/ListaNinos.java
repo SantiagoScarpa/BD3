@@ -83,7 +83,7 @@ public class ListaNinos {
 		mnNinos.add(mniBorrarNino);
 		mniBorrarNino.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				c.mostrarNuevoNino();
+				c.mostrarBorrarNino();
 			}
 		});
 

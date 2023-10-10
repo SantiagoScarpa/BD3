@@ -76,6 +76,10 @@ public class controladora {
 			winDescJuguete = new DescripcionJuguete();
 			winDescJuguete.setControladora(this);
 			winDescJuguete.setVisible(false);
+			
+			winBorrarNino = new BorrarNino();
+			winBorrarNino.setControladora(this);
+			winBorrarNino.setVisible(false);
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			throw new ExcepcionGenerica("Error de conexión al servidor, contacte al administrador ");
 		}
@@ -100,7 +104,8 @@ public class controladora {
 	
 
 	public void mostrarBorrarNino() {
-		
+		cierroVentanas();
+		winBorrarNino.setVisible(true);
 	}
 	
 	public void mostrarDescJuguete() {
@@ -118,6 +123,7 @@ public class controladora {
 		winNuevoJuguete.salir();
 		winListaNinos.salir();
 		winListaJuguete.salir();
+		winBorrarNino.salir();
 		winDescJuguete.salir();
 	}
 	
@@ -241,5 +247,25 @@ public class controladora {
 		}
 		
 		return desc;
+	}
+
+	public void borrarNino(String ciStr) {
+		try {
+			int ci = Integer.parseInt(ciStr);
+			fachada.borrarNinoJuguetes(ci);
+			JOptionPane.showMessageDialog (null, "Nino borrado", "Peticion realizada", JOptionPane.INFORMATION_MESSAGE);	
+			
+		}catch(NumberFormatException e) {
+			JOptionPane.showMessageDialog (null, "CI debe tener un valor numerico","Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		} catch (RemoteException e) {
+			JOptionPane.showMessageDialog (null, "Error al conectar al servidor, contacte al administrador","Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		} catch (ExcepcionPersistencia e) {
+			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		} catch (ExcepcionGenerica e) {
+			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		} catch (ExcepcionNino e) {
+			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		}
+		
 	}
 }
