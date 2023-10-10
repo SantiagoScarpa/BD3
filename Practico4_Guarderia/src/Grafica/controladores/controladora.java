@@ -15,7 +15,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import Grafica.BorrarNino;
-import Grafica.DescripcionJuguete;
+import Grafica.ventanas.DescripcionJuguete;
 import Grafica.ventanas.ListaJuguetesNino;
 import Grafica.ventanas.ListaNinos;
 import Grafica.ventanas.NuevoJuguete;
@@ -72,6 +72,10 @@ public class controladora {
 			winListaJuguete = new ListaJuguetesNino();
 			winListaJuguete.setControladora(this);
 			winListaJuguete.setVisible(false);
+			
+			winDescJuguete = new DescripcionJuguete();
+			winDescJuguete.setControladora(this);
+			winDescJuguete.setVisible(false);
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			throw new ExcepcionGenerica("Error de conexión al servidor, contacte al administrador ");
 		}
@@ -100,7 +104,8 @@ public class controladora {
 	}
 	
 	public void mostrarDescJuguete() {
-		
+		cierroVentanas();
+		winDescJuguete.setVisible(true);
 	}
 	
 	public void mostrarListaJuguete() {
@@ -113,6 +118,7 @@ public class controladora {
 		winNuevoJuguete.salir();
 		winListaNinos.salir();
 		winListaJuguete.salir();
+		winDescJuguete.salir();
 	}
 	
 	
@@ -214,4 +220,26 @@ public class controladora {
 		}
 	}
 	
+	public String darDescripcion(String ciStr, String numString) {
+		String desc = null; 
+		try {
+			int ci = Integer.parseInt(ciStr);
+			int num = Integer.parseInt(numString);
+			desc = fachada.darDescripcion(ci, num);
+		} catch (RemoteException e) {
+			JOptionPane.showMessageDialog (null, "Error al conectar al servidor, contacte al administrador","Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		} catch (ExcepcionPersistencia e) {
+			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		} catch (ExcepcionGenerica e) {
+			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		} catch (ExcepcionNino e) {
+			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		} catch (ExcepcionJuguete e) {
+			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		}catch(NumberFormatException e4) {
+			JOptionPane.showMessageDialog (null, "CI y Numero deben tener un valor numerico","Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+		}
+		
+		return desc;
+	}
 }

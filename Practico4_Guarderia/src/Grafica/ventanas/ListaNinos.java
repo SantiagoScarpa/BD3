@@ -102,7 +102,7 @@ public class ListaNinos {
 		mnJuguete.add(mniDescJuguete);
 		mniDescJuguete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				c.mostrarNuevoJuguete();
+				c.mostrarDescJuguete();
 			}
 		});
 
