@@ -17,15 +17,20 @@ import logicaPersistencia.excepciones.ExcepcionGenerica;
 import logicaPersistencia.excepciones.ExcepcionJuguete;
 import logicaPersistencia.excepciones.ExcepcionNino;
 import logicaPersistencia.excepciones.ExcepcionPersistencia;
+import logicaPersistencia.poolConexiones.Conexion;
+import logicaPersistencia.poolConexiones.IConexion;
+import logicaPersistencia.poolConexiones.IPoolConexiones;
+import logicaPersistencia.poolConexiones.PoolConexiones;
 import logicaPersistencia.valueObjects.VOJuguete;
 import logicaPersistencia.valueObjects.VOJuguete2;
 import logicaPersistencia.valueObjects.VONino;
 
 public class Fachada extends UnicastRemoteObject implements IFachada {
 	private static Fachada instancia;
+	private IPoolConexiones pool;
 	
 	private Fachada() throws RemoteException {
-		
+		pool = new PoolConexiones();
 	}
 		
 	public static Fachada getInstancia () throws RemoteException, ExcepcionPersistencia, ExcepcionGenerica {
@@ -64,8 +69,6 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 			throw new ExcepcionPersistencia("Error al acceder a los datos");
 		}
 		return con;
-		
-
 	}
 	
 	private void finalizoConeccion(Connection c) throws ExcepcionPersistencia {
@@ -80,16 +83,18 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 
 	public void nuevoNino(VONino vNino)throws RemoteException, ExcepcionGenerica,ExcepcionPersistencia, ExcepcionNino {
 		accesoBD acc = new accesoBD();
-		Connection con = crearConeccion();
+		IConexion icon = pool.obtenerConexion(true);	
+		Connection con = ((Conexion) icon).getConection();
 		if(!acc.existeNino(con, vNino.getCedula())) {
 			acc.nuevoNino(con, vNino);
 		}
 		else
 			throw new ExcepcionNino("Nino ya existe en el sistema");
 
-		finalizoConeccion(con);
+		pool.liberarConexion(icon, true);
+		//finalizoConeccion(con);
 	}
-	
+
 	public void nuevoJuguete(VOJuguete vJuguete)throws RemoteException, ExcepcionGenerica,ExcepcionPersistencia, ExcepcionNino {
 		accesoBD acc = new accesoBD();
 		Connection con = crearConeccion();
