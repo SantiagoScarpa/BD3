@@ -13,16 +13,19 @@ import java.util.List;
 import java.util.Properties;
 
 import logicaPersistencia.excepciones.ExcepcionPersistencia;
+import logicaPersistencia.poolConexiones.IConexion;
 import logicaPersistencia.valueObjects.VOJuguete;
 import logicaPersistencia.valueObjects.VOJuguete2;
 import logicaPersistencia.valueObjects.VONino;
+import logicaPersistencia.poolConexiones.Conexion;
 
 public class accesoBD {
 	
-	public boolean existeNino(Connection con, int ci) throws ExcepcionPersistencia {
+	public boolean existeNino(IConexion icon, int ci) throws ExcepcionPersistencia {
 		boolean existe = false;
 		Consultas consu = new Consultas();
 		String query = consu.existeNino();
+		Connection con = ((Conexion) icon).getConection();
 		try {
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, ci);
@@ -33,15 +36,15 @@ public class accesoBD {
 			pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			// TODO Auto-generated catch block
 			throw new ExcepcionPersistencia("Error al acceder a los datos 01");
 		}
 		return existe;
 	}
 
-	public void nuevoNino(Connection con, VONino n) throws ExcepcionPersistencia {
+	public void nuevoNino(IConexion icon, VONino n) throws ExcepcionPersistencia {
 		Consultas consu = new Consultas();
 		String query = consu.insertoNino();
+		Connection con = ((Conexion) icon).getConection();
 		try {
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, n.getCedula());

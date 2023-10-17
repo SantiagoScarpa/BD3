@@ -54,7 +54,7 @@ public class PoolConexiones implements IPoolConexiones{
 		conexiones = new Conexion[tamanio];
 	}
 
-	public IConexion obtenerConexion(boolean b) {
+	public synchronized IConexion obtenerConexion(boolean b) {
 		Conexion resu = null;
 		while(resu ==null) {
 			if(tope > 0 ) {
@@ -65,6 +65,7 @@ public class PoolConexiones implements IPoolConexiones{
 					Connection con;
 					try {
 						con = DriverManager.getConnection(url,user, password);
+						con.setAutoCommit(false);
 						con.setTransactionIsolation(nivelTransaccionalidad);
 						creadas +=1;
 						resu =new Conexion(con);
@@ -73,17 +74,18 @@ public class PoolConexiones implements IPoolConexiones{
 					}
 				}else {
 					try {
-						wait();
+						this.wait();
+//						wait();
 					} catch (InterruptedException e) {
-						JOptionPane.showMessageDialog (null, "Error al conectarse a los datos - pool 2", "Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog (null, "Error al 	 - pool 2", "Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
 		}
 		return resu;
-	}
+	} 
 	
-	public void liberarConexion(IConexion con, boolean ok) {
+	public synchronized void liberarConexion(IConexion con, boolean ok) {
 		conexiones[tope] = (Conexion) con;
 		tope++;
 		try {
@@ -93,9 +95,9 @@ public class PoolConexiones implements IPoolConexiones{
 				((Conexion) con).getConection().rollback();
 			}			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
 			JOptionPane.showMessageDialog (null, "Error al conectarse a los datos - pool 3", "Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		}
-		notify();
+		this.notifyAll();
 	}
 }

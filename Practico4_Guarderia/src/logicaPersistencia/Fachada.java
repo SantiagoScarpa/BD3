@@ -84,10 +84,10 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 	public void nuevoNino(VONino vNino)throws RemoteException, ExcepcionGenerica,ExcepcionPersistencia, ExcepcionNino {
 		accesoBD acc = new accesoBD();
 		IConexion icon = pool.obtenerConexion(true);	
-		Connection con = ((Conexion) icon).getConection();
-		if(!acc.existeNino(con, vNino.getCedula())) {
-			acc.nuevoNino(con, vNino);
-		}
+		//Connection con = ((Conexion) icon).getConection();
+		if(!acc.existeNino(icon, vNino.getCedula())) {
+			acc.nuevoNino(icon, vNino);
+		} 
 		else
 			throw new ExcepcionNino("Nino ya existe en el sistema");
 
@@ -96,18 +96,18 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 	}
 
 	public void nuevoJuguete(VOJuguete vJuguete)throws RemoteException, ExcepcionGenerica,ExcepcionPersistencia, ExcepcionNino {
-		accesoBD acc = new accesoBD();
-		Connection con = crearConeccion();
-		int ci = vJuguete.getCedulaNino();
-		if(acc.existeNino(con, ci)) {
-			int num = acc.obtengoNumJuguete(con, ci);
-			VOJuguete2 vJuguete2 = new VOJuguete2(num+1,vJuguete.getDescripcion(),ci);
-			acc.nuevoJuguete(con, vJuguete2);
-		}
-		else
-			throw new ExcepcionNino("Nino no existe en el sistema");
-
-		finalizoConeccion(con);
+//		accesoBD acc = new accesoBD();
+//		Connection con = crearConeccion();
+//		int ci = vJuguete.getCedulaNino();
+//		if(acc.existeNino(con, ci)) {
+//			int num = acc.obtengoNumJuguete(con, ci);
+//			VOJuguete2 vJuguete2 = new VOJuguete2(num+1,vJuguete.getDescripcion(),ci);
+//			acc.nuevoJuguete(con, vJuguete2);
+//		}
+//		else
+//			throw new ExcepcionNino("Nino no existe en el sistema");
+//
+//		finalizoConeccion(con);
 	}
 
 	public List<VONino> listarNinos() throws RemoteException, ExcepcionPersistencia, ExcepcionGenerica{
@@ -121,14 +121,14 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 	
 	public List<VOJuguete2> listarJuguetes(int ci) throws  RemoteException, ExcepcionPersistencia, ExcepcionGenerica, ExcepcionNino{
 		List<VOJuguete2> lista = new ArrayList<VOJuguete2>();
-		accesoBD acc = new accesoBD();
-		Connection con = crearConeccion();
-		if(acc.existeNino(con, ci))
-			lista = acc.listarJuguetes(con,ci);
-		else
-			throw new ExcepcionNino("Nino no existe en el sistema");
-		
-		finalizoConeccion(con);
+//		accesoBD acc = new accesoBD();
+//		Connection con = crearConeccion();
+//		if(acc.existeNino(con, ci))
+//			lista = acc.listarJuguetes(con,ci);
+//		else
+//			throw new ExcepcionNino("Nino no existe en el sistema");
+//		
+//		finalizoConeccion(con);
 		return lista;
 		
 		
@@ -138,13 +138,13 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 		String desc = null;
 		accesoBD acc = new accesoBD();
 		Connection con = crearConeccion();
-		if(acc.existeNino(con, ci)) {
-			desc = acc.darDescripcion(con, ci, num);
-			if(desc == null)
-				throw new ExcepcionJuguete("Juguete no existe en el sistema");
-		}else {
-			throw new ExcepcionNino("Nino no existe en el sistema");
-		}
+//		if(acc.existeNino(con, ci)) {
+//			desc = acc.darDescripcion(con, ci, num);
+//			if(desc == null)
+//				throw new ExcepcionJuguete("Juguete no existe en el sistema");
+//		}else {
+//			throw new ExcepcionNino("Nino no existe en el sistema");
+//		}
 			
 		finalizoConeccion(con);	
 		return desc;
@@ -153,13 +153,13 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 	public void borrarNinoJuguetes(int ci) throws RemoteException, ExcepcionNino, ExcepcionPersistencia, ExcepcionGenerica {
 		accesoBD acc = new accesoBD();
 		Connection con = crearConeccion();
-		if(acc.existeNino(con, ci)) {
-			acc.borrarJuguetes(con, ci);
-			acc.borrarNino(con, ci);
-			
-		}else {
-			throw new ExcepcionNino("Nino no existe en el sistema");
-		}
+//		if(acc.existeNino(con, ci)) {
+//			acc.borrarJuguetes(con, ci);
+//			acc.borrarNino(con, ci);
+//			
+//		}else {
+//			throw new ExcepcionNino("Nino no existe en el sistema");
+//		}
 		finalizoConeccion(con);
 	}
 	
