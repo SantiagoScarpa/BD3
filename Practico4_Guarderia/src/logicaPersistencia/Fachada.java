@@ -96,71 +96,77 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 	}
 
 	public void nuevoJuguete(VOJuguete vJuguete)throws RemoteException, ExcepcionGenerica,ExcepcionPersistencia, ExcepcionNino {
-//		accesoBD acc = new accesoBD();
-//		Connection con = crearConeccion();
-//		int ci = vJuguete.getCedulaNino();
-//		if(acc.existeNino(con, ci)) {
-//			int num = acc.obtengoNumJuguete(con, ci);
-//			VOJuguete2 vJuguete2 = new VOJuguete2(num+1,vJuguete.getDescripcion(),ci);
-//			acc.nuevoJuguete(con, vJuguete2);
-//		}
-//		else
-//			throw new ExcepcionNino("Nino no existe en el sistema");
-//
-//		finalizoConeccion(con);
+		accesoBD acc = new accesoBD();
+		IConexion icon = pool.obtenerConexion(true);	
+		int ci = vJuguete.getCedulaNino();
+		if(acc.existeNino(icon, ci)) {
+			int num = acc.obtengoNumJuguete(icon, ci);
+			VOJuguete2 vJuguete2 = new VOJuguete2(num+1,vJuguete.getDescripcion(),ci);
+			acc.nuevoJuguete(icon, vJuguete2);
+		}
+		else
+			throw new ExcepcionNino("Nino no existe en el sistema");
+
+		pool.liberarConexion(icon, true);
 	}
 
 	public List<VONino> listarNinos() throws RemoteException, ExcepcionPersistencia, ExcepcionGenerica{
 		List<VONino> lista = new ArrayList<VONino>();
 		accesoBD acc = new accesoBD();
-		Connection con = crearConeccion();
-		lista = acc.listarNinos(con);
-		finalizoConeccion(con);
+		IConexion icon = pool.obtenerConexion(true);	
+		lista = acc.listarNinos(icon);
+		pool.liberarConexion(icon, true);	
 		return lista;
 	}
 	
 	public List<VOJuguete2> listarJuguetes(int ci) throws  RemoteException, ExcepcionPersistencia, ExcepcionGenerica, ExcepcionNino{
 		List<VOJuguete2> lista = new ArrayList<VOJuguete2>();
-//		accesoBD acc = new accesoBD();
-//		Connection con = crearConeccion();
-//		if(acc.existeNino(con, ci))
-//			lista = acc.listarJuguetes(con,ci);
-//		else
-//			throw new ExcepcionNino("Nino no existe en el sistema");
-//		
-//		finalizoConeccion(con);
+		accesoBD acc = new accesoBD();
+		IConexion icon = pool.obtenerConexion(true);	
+		if(acc.existeNino(icon, ci))
+			lista = acc.listarJuguetes(icon,ci);
+		else
+			throw new ExcepcionNino("Nino no existe en el sistema");
+
+		try {
+			Thread.sleep(30);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		pool.liberarConexion(icon, true);	
 		return lista;
-		
 		
 	}
 	
 	public String darDescripcion(int ci, int num) throws RemoteException, ExcepcionPersistencia, ExcepcionGenerica, ExcepcionNino, ExcepcionJuguete {
 		String desc = null;
 		accesoBD acc = new accesoBD();
-		Connection con = crearConeccion();
-//		if(acc.existeNino(con, ci)) {
-//			desc = acc.darDescripcion(con, ci, num);
-//			if(desc == null)
-//				throw new ExcepcionJuguete("Juguete no existe en el sistema");
-//		}else {
-//			throw new ExcepcionNino("Nino no existe en el sistema");
-//		}
+		IConexion icon = pool.obtenerConexion(true);	
+		if(acc.existeNino(icon, ci)) {
+			desc = acc.darDescripcion(icon, ci, num);
+			if(desc == null)
+				throw new ExcepcionJuguete("Juguete no existe en el sistema");
+		}else {
+			throw new ExcepcionNino("Nino no existe en el sistema");
+		}
 			
-		finalizoConeccion(con);	
+		pool.liberarConexion(icon, true);	
 		return desc;
 	}
 	
 	public void borrarNinoJuguetes(int ci) throws RemoteException, ExcepcionNino, ExcepcionPersistencia, ExcepcionGenerica {
 		accesoBD acc = new accesoBD();
-		Connection con = crearConeccion();
-//		if(acc.existeNino(con, ci)) {
-//			acc.borrarJuguetes(con, ci);
-//			acc.borrarNino(con, ci);
-//			
-//		}else {
-//			throw new ExcepcionNino("Nino no existe en el sistema");
-//		}
-		finalizoConeccion(con);
+		IConexion icon = pool.obtenerConexion(true);			
+		if(acc.existeNino(icon, ci)) {
+			acc.borrarJuguetes(icon, ci);
+			acc.borrarNino(icon, ci);
+			
+		}else {
+			throw new ExcepcionNino("Nino no existe en el sistema");
+		}
+		
+		pool.liberarConexion(icon, true);	
 	}
 	
 }

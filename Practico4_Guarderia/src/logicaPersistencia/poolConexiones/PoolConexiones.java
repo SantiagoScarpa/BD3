@@ -56,6 +56,7 @@ public class PoolConexiones implements IPoolConexiones{
 
 	public synchronized IConexion obtenerConexion(boolean b) {
 		Conexion resu = null;
+		System.out.println("obtenerConexion=="+tope+" "+creadas);
 		while(resu ==null) {
 			if(tope > 0 ) {
 				tope -= 1;
@@ -82,6 +83,7 @@ public class PoolConexiones implements IPoolConexiones{
 				}
 			}
 		}
+		System.out.println("obtenerConexion2=="+tope+" "+creadas);
 		return resu;
 	} 
 	

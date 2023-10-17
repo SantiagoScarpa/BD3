@@ -58,10 +58,11 @@ public class accesoBD {
 		}
 	}
 	
-	public int obtengoNumJuguete(Connection con, int ci) throws ExcepcionPersistencia {
+	public int obtengoNumJuguete(IConexion icon, int ci) throws ExcepcionPersistencia {
 		int num = 0;
 		Consultas consu = new Consultas();
 		String query = consu.obtengoNumJuguete();
+		Connection con = ((Conexion) icon).getConection();
 		try {
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, ci);
@@ -76,9 +77,10 @@ public class accesoBD {
 		return num;
 	}
 	
-	public void nuevoJuguete(Connection con, VOJuguete2 j)throws ExcepcionPersistencia  {
+	public void nuevoJuguete(IConexion icon, VOJuguete2 j)throws ExcepcionPersistencia  {
 		Consultas consu = new Consultas();
 		String query = consu.insertoJuguete();
+		Connection con = ((Conexion) icon).getConection();
 		try {
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1,j.getNumero());
@@ -92,10 +94,11 @@ public class accesoBD {
 		}
 	}
 	
-	public List<VONino> listarNinos(Connection con)throws ExcepcionPersistencia {
+	public List<VONino> listarNinos(IConexion icon)throws ExcepcionPersistencia {
 		List<VONino> listaN = new ArrayList<VONino>();
 		Consultas consu = new Consultas();
 		String query = consu.listoNino();
+		Connection con = ((Conexion) icon).getConection();
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
@@ -112,10 +115,11 @@ public class accesoBD {
 		return listaN;
 	}
 	
-	public List<VOJuguete2> listarJuguetes(Connection con, int ci)throws ExcepcionPersistencia {
+	public List<VOJuguete2> listarJuguetes(IConexion icon, int ci)throws ExcepcionPersistencia {
 		List<VOJuguete2> listaJ = new ArrayList<VOJuguete2>();
 		Consultas consu = new Consultas();
 		String query = consu.listoJuguete();
+		Connection con = ((Conexion) icon).getConection();
 		try {
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, ci);
@@ -134,10 +138,11 @@ public class accesoBD {
 		return listaJ;
 	}
 	
-	public String darDescripcion(Connection con, int ci, int numJ) throws ExcepcionPersistencia {
+	public String darDescripcion(IConexion icon, int ci, int numJ) throws ExcepcionPersistencia {
 		Consultas consu = new Consultas();
 		String desc = null;
 		String query = consu.descripcionJuguete();
+		Connection con = ((Conexion) icon).getConection();
 		try {
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, ci);
@@ -155,9 +160,10 @@ public class accesoBD {
 		return desc;
 	}
 	
-	public void borrarJuguetes(Connection con, int ci) throws ExcepcionPersistencia {
+	public void borrarJuguetes(IConexion icon, int ci) throws ExcepcionPersistencia {
 		Consultas consu = new Consultas();
 		String query = consu.borrarJuguetes();
+		Connection con = ((Conexion) icon).getConection();
 		try {
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, ci);
@@ -168,9 +174,10 @@ public class accesoBD {
 		}
 	}
 	
-	public void borrarNino(Connection con, int ci) throws ExcepcionPersistencia {
+	public void borrarNino(IConexion icon, int ci) throws ExcepcionPersistencia {
 		Consultas consu = new Consultas();
 		String query = consu.borrarNino();
+		Connection con = ((Conexion) icon).getConection();
 		try {
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, ci);
