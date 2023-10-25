@@ -4,7 +4,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.List;
 import java.util.Properties;
+
+import logica.Nino;
+import logica.valueObjects.VONino;
 
 public class DAONinos {
 	private String driver;
@@ -44,5 +48,23 @@ public class DAONinos {
 		}		
 	}
 	
+	public boolean member(int cedula) {
+		return false;
+	}
 	
+	public void insert (Nino nino) {
+		
+	}
+	
+	public Nino find(int ci) {
+		return null;	
+	}
+	
+	public void delete(int ci) {
+		
+	}
+	
+	public List<VONino> listarNinos(){
+		return null;
+	}
 }

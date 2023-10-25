@@ -10,7 +10,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
 
-import logica.Juguetes.Juguete;
+import logica.Juguete;
+import logica.excepciones.ExcepcionGenerica;
+import logica.excepciones.ExcepcionPersistencia;
 import logica.valueObjects.VOJuguete;
 import persistencia.consultas.Consultas;
 
@@ -23,7 +25,7 @@ public class DAOJuguetes {
 	
 	private int cedulaNino;
 	
-	public DAOJuguetes(int cedN) {
+	public DAOJuguetes(int cedN) throws ExcepcionGenerica, ExcepcionPersistencia{
 		cedulaNino = cedN;
 		Properties prop = new Properties();
 		String nomArch = "config/config.properties.txt";
@@ -41,22 +43,23 @@ public class DAOJuguetes {
 			pass 	= prop.getProperty("password");
 			
 		} catch (IOException e) {
-			System.out.println("Error al leer archivo de conexion 01, contacte al administrador");
+			throw new ExcepcionGenerica("Error al leer archivo de conexion 01, contacte al administrador");
+//			System.out.println("Error al leer archivo de conexion 01, contacte al administrador");
 		}
 		
 		if (driver == null || url == null || usuario == null || pass == null)
-			System.out.println("Error al leer archivo de conexion 02, contacte al administrador");
+			throw new ExcepcionGenerica("Error al leer archivo de conexion 02, contacte al administrador");
 		
 		/* 1. cargo dinamicamente el driver de MySQL */
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
 			//e.printStackTrace();
-			System.out.println("Error carga driver");
+			throw new ExcepcionPersistencia("Error en carga de driver, contacte al administrador");
 		}	
 	}
 	
-	public int obtengoNumJuguete(int ci)  {
+	public int obtengoNumJuguete(int ci) throws ExcepcionPersistencia  {
 		int num = 0;
 		Consultas consu = new Consultas();
 		String query = consu.obtengoNumJuguete();
@@ -71,12 +74,12 @@ public class DAOJuguetes {
 			rs.close();
 			pstmt.close();
 		} catch (SQLException e) {
-			//throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
 		}
 		return num;
 	}
 	
-	public void insback(Juguete jug) {		
+	public void insback(Juguete jug) throws ExcepcionPersistencia {		
 		try {
 			Connection con = DriverManager.getConnection (url,usuario,pass);
 			Consultas consu = new Consultas();
@@ -89,7 +92,7 @@ public class DAOJuguetes {
 			pstmt.executeUpdate();
 			pstmt.close();
 		}catch (SQLException e) {
-			//throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
 		}
 	}
 	

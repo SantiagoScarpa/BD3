@@ -1,4 +1,4 @@
-package logica.Juguetes;
+package logica;
 
 public class Juguete {
 	private int numero;
