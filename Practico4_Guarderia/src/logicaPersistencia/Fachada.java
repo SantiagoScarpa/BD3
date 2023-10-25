@@ -90,7 +90,7 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 		} 
 		else
 			throw new ExcepcionNino("Nino ya existe en el sistema");
-
+		
 		pool.liberarConexion(icon, true);
 		//finalizoConeccion(con);
 	}
@@ -106,7 +106,7 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 		}
 		else
 			throw new ExcepcionNino("Nino no existe en el sistema");
-
+		
 		pool.liberarConexion(icon, true);
 	}
 
