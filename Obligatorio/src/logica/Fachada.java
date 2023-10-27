@@ -32,9 +32,7 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 	}
 	
 	public void nuevoNino(VONino vNino)throws ExcepcionGenerica,ExcepcionPersistencia, ExcepcionNino, RemoteException{
-		System.out.println("ci=="+vNino.getCedula());
 		if(!daoN.member(vNino.getCedula())) {
-			System.out.println("adentro");
 			Nino n = new Nino(vNino.getCedula(),vNino.getNombre(),vNino.getApellido());
 			daoN.insert(n);
 		}else
