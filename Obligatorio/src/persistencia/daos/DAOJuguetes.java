@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -14,6 +15,7 @@ import logica.Juguete;
 import logica.excepciones.ExcepcionGenerica;
 import logica.excepciones.ExcepcionPersistencia;
 import logica.valueObjects.VOJuguete;
+import logica.valueObjects.VOJuguete2;
 import persistencia.consultas.Consultas;
 
 
@@ -44,7 +46,6 @@ public class DAOJuguetes {
 			
 		} catch (IOException e) {
 			throw new ExcepcionGenerica("Error al leer archivo de conexion 01, contacte al administrador");
-//			System.out.println("Error al leer archivo de conexion 01, contacte al administrador");
 		}
 		
 		if (driver == null || url == null || usuario == null || pass == null)
@@ -54,7 +55,6 @@ public class DAOJuguetes {
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
-			//e.printStackTrace();
 			throw new ExcepcionPersistencia("Error en carga de driver, contacte al administrador");
 		}	
 	}
@@ -88,28 +88,84 @@ public class DAOJuguetes {
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, jug.getNumero());
 			pstmt.setString(2, jug.getDescripcion());
+			pstmt.setInt(3, cedulaNino);
 			
 			pstmt.executeUpdate();
 			pstmt.close();
+			con.close();
 		}catch (SQLException e) {
 			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
 		}
 	}
 	
-	public int largo() {
-		return 1;
+	public int largo() throws ExcepcionPersistencia {
+		return obtengoNumJuguete(cedulaNino);
 	}
 	
-	public Juguete kesimo(int i) {
-		return null;
+	public Juguete kesimo(int numJuguete) throws ExcepcionPersistencia {
+		Juguete j = null;
+		try {
+			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Consultas consu = new Consultas();
+			String query = consu.descripcionJuguete();
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, cedulaNino);
+			pstmt.setInt(2,numJuguete);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				j = new Juguete(numJuguete,rs.getString(1));
+			}
+			
+			rs.close();
+			pstmt.close();
+			con.close();
+			
+		}catch (SQLException e) {
+			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+		}
+		return j;
 	}
 	
-	public List<VOJuguete> listarJuguetes(){
-		return null;
+	public List<VOJuguete2> listarJuguetes() throws ExcepcionPersistencia{
+		List<VOJuguete2> lista = new ArrayList<VOJuguete2>();
+		try {
+			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Consultas consu = new Consultas();
+			String query = consu.listoJuguete();
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, cedulaNino);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				VOJuguete2 voJ = new VOJuguete2(rs.getInt(1),rs.getString(2),cedulaNino);
+				lista.add(voJ);
+			}
+			
+			rs.close();
+			pstmt.close();
+			con.close();
+		}catch (SQLException e) {
+			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+		}
+		return lista;
 	}
 	
-	public void borrarJuguetes() {
-		
+	public void borrarJuguetes() throws ExcepcionPersistencia {
+		try {
+			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Consultas consu = new Consultas();
+			String query = consu.borrarJuguetes();
+			
+			PreparedStatement pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, cedulaNino);
+			
+			pstmt.executeUpdate();
+			pstmt.close();
+			con.close();
+		}catch (SQLException e) {
+			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+		}
 	}
 	
 	

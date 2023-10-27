@@ -1,5 +1,7 @@
 driver		= com.mysql.jdbc.Driver
-url 		= jdbc:mysql://localhost:3308
-urlBD 		= jdbc:mysql://localhost:3308/Guarderia
+urlSv 		= jdbc:mysql://localhost:3308
+url 		= jdbc:mysql://localhost:3308/Guarderia
 usuario 	= root
 password	= root
+ip 			= localhost
+port		= 81

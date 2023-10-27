@@ -4,11 +4,20 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
 import logica.Nino;
+import logica.excepciones.ExcepcionGenerica;
+import logica.excepciones.ExcepcionPersistencia;
+import logica.valueObjects.VOJuguete2;
 import logica.valueObjects.VONino;
+import persistencia.consultas.Consultas;
 
 public class DAONinos {
 	private String driver;
@@ -16,7 +25,7 @@ public class DAONinos {
 	private String usuario;
 	private String pass;
 	
-	public DAONinos() {
+	public DAONinos() throws ExcepcionPersistencia, ExcepcionGenerica {
 		Properties prop = new Properties();
 		String nomArch = "config/config.properties.txt";
 		// Variables de conexion a BD
@@ -33,7 +42,7 @@ public class DAONinos {
 			pass 	= prop.getProperty("password");
 			
 		} catch (IOException e) {
-			System.out.println("Error al leer archivo de conexion 01, contacte al administrador");
+			throw new ExcepcionGenerica("Error al leer archivo de conexion 01, contacte al administrador");
 		}
 		
 		if (driver == null || url == null || usuario == null || pass == null)
@@ -43,28 +52,112 @@ public class DAONinos {
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
-			//e.printStackTrace();
-			System.out.println("Error carga driver");
+			throw new ExcepcionPersistencia("Error en carga de driver, contacte al administrador");
 		}		
 	}
 	
-	public boolean member(int cedula) {
-		return false;
+	public boolean member(int cedula) throws ExcepcionPersistencia {
+		boolean existe = false;
+		try {
+			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Consultas consu = new Consultas();
+			String query = consu.existeNino();
+			PreparedStatement pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, cedula);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next())
+				existe = true;
+			
+			pstmt.close();
+			con.close();
+			
+		}catch (SQLException e) {
+			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+		}
+		
+		return existe;
 	}
 	
-	public void insert (Nino nino) {
+	public void insert (Nino nino) throws ExcepcionPersistencia {
+		try {
+			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Consultas consu = new Consultas();
+			String query = consu.insertoNino();
+			
+			PreparedStatement pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, nino.getCedula());
+			pstmt.setString(2, nino.getNombre());
+			pstmt.setString(3, nino.getApellido());
+			
+			pstmt.executeUpdate();
+			
+			pstmt.close();
+			con.close();
+		}catch (SQLException e) {
+			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+		}
 		
 	}
 	
-	public Nino find(int ci) {
-		return null;	
+	public Nino find(int ci) throws ExcepcionGenerica, ExcepcionPersistencia {
+		Nino n = null;
+		try {
+			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Consultas consu = new Consultas();
+			String query = consu.existeNino();
+			PreparedStatement pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, ci);
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next())
+				n = new Nino(rs.getInt(1),rs.getString(2),rs.getString(3));
+			
+			pstmt.close();
+			con.close();
+			
+		}catch (SQLException e) {
+			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+		}
+		return n;	
 	}
 	
-	public void delete(int ci) {
-		
+	//Precondicion, borrar primero los juguetes del nino
+	public void delete(int ci) throws ExcepcionPersistencia {
+		try {
+			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Consultas consu = new Consultas();
+			String query = consu.borrarNino();
+			
+			PreparedStatement pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, ci);
+			
+			pstmt.executeUpdate();
+			pstmt.close();
+			con.close();
+		}catch (SQLException e) {
+			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+		}
 	}
 	
-	public List<VONino> listarNinos(){
-		return null;
+	public List<VONino> listarNinos() throws ExcepcionPersistencia{
+		List<VONino> lista = new ArrayList<VONino>();
+		try {
+			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Consultas consu = new Consultas();
+			String query = consu.listoNino();
+
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while(rs.next()) {
+				VONino voN = new VONino(rs.getInt(1),rs.getString(2),rs.getString(3));
+				lista.add(voN);
+			}
+			
+			rs.close();
+			stmt.close();
+			con.close();
+		}catch (SQLException e) {
+			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+		}
+		return lista;
 	}
 }
