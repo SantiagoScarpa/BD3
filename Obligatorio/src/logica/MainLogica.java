@@ -31,7 +31,7 @@ public class MainLogica {
 				ip = prop.getProperty("ip");
 				port = prop.getProperty("port");
 			} catch (IOException e) {
-				System.out.println("Error al leer archivo de conexion, contacte al administrador");
+				System.out.println("Error al leer archivo de conexion ML01, contacte al administrador");
 			}
 			
 						

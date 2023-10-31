@@ -45,17 +45,17 @@ public class DAOJuguetes {
 			pass 	= prop.getProperty("password");
 			
 		} catch (IOException e) {
-			throw new ExcepcionGenerica("Error al leer archivo de conexion 01, contacte al administrador");
+			throw new ExcepcionGenerica("Error al leer archivo de conexion DJ01, contacte al administrador");
 		}
 		
 		if (driver == null || url == null || usuario == null || pass == null)
-			throw new ExcepcionGenerica("Error al leer archivo de conexion 02, contacte al administrador");
+			throw new ExcepcionGenerica("Error al leer archivo de conexion DJ02, contacte al administrador");
 		
 		/* 1. cargo dinamicamente el driver de MySQL */
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
-			throw new ExcepcionPersistencia("Error en carga de driver, contacte al administrador");
+			throw new ExcepcionPersistencia("Error en carga de driver DJ03, contacte al administrador");
 		}	
 	}
 	
@@ -74,7 +74,7 @@ public class DAOJuguetes {
 			rs.close();
 			pstmt.close();
 		} catch (SQLException e) {
-			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+			throw new ExcepcionPersistencia("Error al acceder a los datos DJ04");
 		}
 		return num;
 	}
@@ -94,7 +94,7 @@ public class DAOJuguetes {
 			pstmt.close();
 			con.close();
 		}catch (SQLException e) {
-			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+			throw new ExcepcionPersistencia("Error al acceder a los datos DJ05");
 		}
 	}
 	
@@ -122,7 +122,7 @@ public class DAOJuguetes {
 			con.close();
 			
 		}catch (SQLException e) {
-			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+			throw new ExcepcionPersistencia("Error al acceder a los datos DJ06");
 		}
 		return j;
 	}
@@ -146,7 +146,7 @@ public class DAOJuguetes {
 			pstmt.close();
 			con.close();
 		}catch (SQLException e) {
-			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+			throw new ExcepcionPersistencia("Error al acceder a los datos DJ07");
 		}
 		return lista;
 	}
@@ -164,7 +164,7 @@ public class DAOJuguetes {
 			pstmt.close();
 			con.close();
 		}catch (SQLException e) {
-			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+			throw new ExcepcionPersistencia("Error al acceder a los datos DJ08");
 		}
 	}
 	

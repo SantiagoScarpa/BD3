@@ -35,10 +35,10 @@ public class MainCrearBD {
 				
 				
 			} catch (IOException e) {
-				System.out.println("Error al leer archivo de conexion, contacte al administrador");
+				System.out.println("Error al leer archivo de conexion MBD01, contacte al administrador");
 			}
 			if (driver == null || url == null || usuario == null || pass == null)
-				System.out.println("Error al leer archivo de conexion, contacte al administrador");
+				System.out.println("Error al leer archivo de conexion MBD02, contacte al administrador");
 			
 			/* 1. cargo dinamicamente el driver de MySQL */
 			Class.forName(driver);

@@ -42,17 +42,17 @@ public class DAONinos {
 			pass 	= prop.getProperty("password");
 			
 		} catch (IOException e) {
-			throw new ExcepcionGenerica("Error al leer archivo de conexion 01, contacte al administrador");
+			throw new ExcepcionGenerica("Error al leer archivo de conexion DN01, contacte al administrador");
 		}
 		
 		if (driver == null || url == null || usuario == null || pass == null)
-			System.out.println("Error al leer archivo de conexion 02, contacte al administrador");
+			System.out.println("Error al leer archivo de conexion DN02, contacte al administrador");
 		
 		/* 1. cargo dinamicamente el driver de MySQL */
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
-			throw new ExcepcionPersistencia("Error en carga de driver, contacte al administrador");
+			throw new ExcepcionPersistencia("Error en carga de driver DN03, contacte al administrador");
 		}		
 	}
 	
@@ -72,7 +72,7 @@ public class DAONinos {
 			con.close();
 			
 		}catch (SQLException e) {
-			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+			throw new ExcepcionPersistencia("Error al acceder a los datos DN04");
 		}
 		
 		return existe;
@@ -94,7 +94,7 @@ public class DAONinos {
 			pstmt.close();
 			con.close();
 		}catch (SQLException e) {
-			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+			throw new ExcepcionPersistencia("Error al acceder a los datos DN05");
 		}
 		
 	}
@@ -115,7 +115,7 @@ public class DAONinos {
 			con.close();
 			
 		}catch (SQLException e) {
-			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+			throw new ExcepcionPersistencia("Error al acceder a los datos DN06");
 		}
 		return n;	
 	}
@@ -134,7 +134,7 @@ public class DAONinos {
 			pstmt.close();
 			con.close();
 		}catch (SQLException e) {
-			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+			throw new ExcepcionPersistencia("Error al acceder a los datos DN07");
 		}
 	}
 	
@@ -156,7 +156,7 @@ public class DAONinos {
 			stmt.close();
 			con.close();
 		}catch (SQLException e) {
-			throw new ExcepcionPersistencia("Error al acceder a los datos 03");
+			throw new ExcepcionPersistencia("Error al acceder a los datos DN08");
 		}
 		return lista;
 	}

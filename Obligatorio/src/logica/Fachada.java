@@ -1,9 +1,12 @@
 package logica;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import logica.Fachada;
 import logica.excepciones.ExcepcionGenerica;
@@ -15,13 +18,34 @@ import logica.valueObjects.VOJuguete2;
 import logica.valueObjects.VONino;
 import logica.IFachada;
 import persistencia.daos.DAONinos;
+import persistencia.poolConexiones.IPoolConexiones;
 
 public class Fachada extends UnicastRemoteObject implements IFachada {
 	private static Fachada instancia;
 	private DAONinos daoN;
+	private IPoolConexiones ipool;
 	
 	private Fachada() throws RemoteException, ExcepcionPersistencia, ExcepcionGenerica {
 		daoN = new DAONinos();
+		Properties prop = new Properties();
+		String nomArch = "config/config.properties.txt";
+		String poolConcreto=null;
+		try {
+			prop.load(new FileInputStream(nomArch));
+			poolConcreto = prop.getProperty("poolConexion");
+			
+		} catch (IOException e) {
+			throw new ExcepcionGenerica("Error al leer archivo de conexion F01, contacte al administrador");
+		}
+		
+		if (poolConcreto == null)
+			throw new ExcepcionGenerica("Error al crear pool conexiones F01, contacte al administrador");
+		
+		try {
+			ipool = (IPoolConexiones) Class.forName(poolConcreto).newInstance();
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+			throw new ExcepcionGenerica("Error al crear pool conexiones F02, contacte al administrador");
+		}
 	}
 	
 	public static Fachada getInstancia () throws RemoteException, ExcepcionPersistencia, ExcepcionGenerica {
