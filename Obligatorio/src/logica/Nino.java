@@ -6,6 +6,7 @@ import logica.excepciones.ExcepcionGenerica;
 import logica.excepciones.ExcepcionPersistencia;
 import logica.valueObjects.VOJuguete2;
 import persistencia.daos.DAOJuguetes;
+import persistencia.poolConexiones.IConexion;
 
 public class Nino {
 	private int cedula;
@@ -32,31 +33,31 @@ public class Nino {
 		return apellido;
 	}
 	
-	public boolean tieneJuguete(int numJ) throws ExcepcionPersistencia {
-		if(secuencia.kesimo(numJ) == null)
+	public boolean tieneJuguete(IConexion icon,int numJ) throws ExcepcionPersistencia {
+		if(secuencia.kesimo(icon, numJ) == null)
 			return false;
 		else
 			return true;
 	}
 	
-	public int cantidadJuguetes() throws ExcepcionPersistencia {
-		return secuencia.largo();
+	public int cantidadJuguetes(IConexion icon) throws ExcepcionPersistencia {
+		return secuencia.largo(icon);
 	}
 	
-	public void addJuguete(Juguete j) throws ExcepcionPersistencia {
-		secuencia.insback(j);
+	public void addJuguete(IConexion icon, Juguete j) throws ExcepcionPersistencia {
+		secuencia.insback(icon, j);
 		
 	}
 	
-	public Juguete obtenerJuguete(int numJ) throws ExcepcionPersistencia {
-		return secuencia.kesimo(numJ);
+	public Juguete obtenerJuguete(IConexion icon, int numJ) throws ExcepcionPersistencia {
+		return secuencia.kesimo(icon, numJ);
 	}
 	
-	public List<VOJuguete2> listarJuguetes() throws ExcepcionPersistencia{
-		return secuencia.listarJuguetes();
+	public List<VOJuguete2> listarJuguetes(IConexion icon) throws ExcepcionPersistencia{
+		return secuencia.listarJuguetes(icon);
 	}
 
-	public void borrarJuguetes() throws ExcepcionPersistencia {
-		secuencia.borrarJuguetes();
+	public void borrarJuguetes(IConexion icon) throws ExcepcionPersistencia {
+		secuencia.borrarJuguetes(icon);
 	}
 }

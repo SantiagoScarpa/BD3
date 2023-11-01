@@ -1,70 +1,35 @@
 package persistencia.daos;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import logica.Juguete;
 import logica.excepciones.ExcepcionGenerica;
 import logica.excepciones.ExcepcionPersistencia;
-import logica.valueObjects.VOJuguete;
 import logica.valueObjects.VOJuguete2;
 import persistencia.consultas.Consultas;
+import persistencia.poolConexiones.Conexion;
+import persistencia.poolConexiones.IConexion;
 
 
 public class DAOJuguetes {
-	private String driver;
-	private String url;
-	private String usuario;
-	private String pass;
 	
 	private int cedulaNino;
 	
 	public DAOJuguetes(int cedN) throws ExcepcionGenerica, ExcepcionPersistencia{
 		cedulaNino = cedN;
-		Properties prop = new Properties();
-		String nomArch = "config/config.properties.txt";
-		// Variables de conexion a BD
-		driver = null;
-		url = null;
-		usuario = null;
-		pass = null;
-		
-		try {
-			prop.load(new FileInputStream(nomArch));
-			driver 	= prop.getProperty("driver");
-			url 	= prop.getProperty("url");
-			usuario = prop.getProperty("usuario");
-			pass 	= prop.getProperty("password");
-			
-		} catch (IOException e) {
-			throw new ExcepcionGenerica("Error al leer archivo de conexion DJ01, contacte al administrador");
-		}
-		
-		if (driver == null || url == null || usuario == null || pass == null)
-			throw new ExcepcionGenerica("Error al leer archivo de conexion DJ02, contacte al administrador");
-		
-		/* 1. cargo dinamicamente el driver de MySQL */
-		try {
-			Class.forName(driver);
-		} catch (ClassNotFoundException e) {
-			throw new ExcepcionPersistencia("Error en carga de driver DJ03, contacte al administrador");
-		}	
 	}
 	
-	public int obtengoNumJuguete(int ci) throws ExcepcionPersistencia  {
+	public int obtengoNumJuguete(IConexion icon,int ci) throws ExcepcionPersistencia  {
 		int num = 0;
 		Consultas consu = new Consultas();
 		String query = consu.obtengoNumJuguete();
 		try {
-			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Connection con = ((Conexion) icon).getConection();
 			
 			PreparedStatement pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, ci);
@@ -79,9 +44,9 @@ public class DAOJuguetes {
 		return num;
 	}
 	
-	public void insback(Juguete jug) throws ExcepcionPersistencia {		
+	public void insback(IConexion icon, Juguete jug) throws ExcepcionPersistencia {		
 		try {
-			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Connection con = ((Conexion) icon).getConection();
 			Consultas consu = new Consultas();
 			String query = consu.insertoJuguete();
 			
@@ -92,20 +57,20 @@ public class DAOJuguetes {
 			
 			pstmt.executeUpdate();
 			pstmt.close();
-			con.close();
+			
 		}catch (SQLException e) {
 			throw new ExcepcionPersistencia("Error al acceder a los datos DJ05");
 		}
 	}
 	
-	public int largo() throws ExcepcionPersistencia {
-		return obtengoNumJuguete(cedulaNino);
+	public int largo(IConexion icon) throws ExcepcionPersistencia {
+		return obtengoNumJuguete(icon,cedulaNino);
 	}
 	
-	public Juguete kesimo(int numJuguete) throws ExcepcionPersistencia {
+	public Juguete kesimo(IConexion icon,int numJuguete) throws ExcepcionPersistencia {
 		Juguete j = null;
 		try {
-			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Connection con = ((Conexion) icon).getConection();
 			Consultas consu = new Consultas();
 			String query = consu.descripcionJuguete();
 
@@ -119,7 +84,7 @@ public class DAOJuguetes {
 			
 			rs.close();
 			pstmt.close();
-			con.close();
+			
 			
 		}catch (SQLException e) {
 			throw new ExcepcionPersistencia("Error al acceder a los datos DJ06");
@@ -127,10 +92,10 @@ public class DAOJuguetes {
 		return j;
 	}
 	
-	public List<VOJuguete2> listarJuguetes() throws ExcepcionPersistencia{
+	public List<VOJuguete2> listarJuguetes(IConexion icon) throws ExcepcionPersistencia{
 		List<VOJuguete2> lista = new ArrayList<VOJuguete2>();
 		try {
-			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Connection con = ((Conexion) icon).getConection();
 			Consultas consu = new Consultas();
 			String query = consu.listoJuguete();
 
@@ -144,16 +109,16 @@ public class DAOJuguetes {
 			
 			rs.close();
 			pstmt.close();
-			con.close();
+			
 		}catch (SQLException e) {
 			throw new ExcepcionPersistencia("Error al acceder a los datos DJ07");
 		}
 		return lista;
 	}
 	
-	public void borrarJuguetes() throws ExcepcionPersistencia {
+	public void borrarJuguetes(IConexion icon) throws ExcepcionPersistencia {
 		try {
-			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Connection con = ((Conexion) icon).getConection();
 			Consultas consu = new Consultas();
 			String query = consu.borrarJuguetes();
 			
@@ -162,7 +127,7 @@ public class DAOJuguetes {
 			
 			pstmt.executeUpdate();
 			pstmt.close();
-			con.close();
+			
 		}catch (SQLException e) {
 			throw new ExcepcionPersistencia("Error al acceder a los datos DJ08");
 		}

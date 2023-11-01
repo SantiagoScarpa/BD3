@@ -1,65 +1,31 @@
 package persistencia.daos;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import logica.Nino;
 import logica.excepciones.ExcepcionGenerica;
 import logica.excepciones.ExcepcionPersistencia;
-import logica.valueObjects.VOJuguete2;
 import logica.valueObjects.VONino;
+import persistencia.poolConexiones.Conexion;
 import persistencia.consultas.Consultas;
+import persistencia.poolConexiones.IConexion;
 
 public class DAONinos {
-	private String driver;
-	private String url;
-	private String usuario;
-	private String pass;
 	
 	public DAONinos() throws ExcepcionPersistencia, ExcepcionGenerica {
-		Properties prop = new Properties();
-		String nomArch = "config/config.properties.txt";
-		// Variables de conexion a BD
-		driver = null;
-		url = null;
-		usuario = null;
-		pass = null;
-		
-		try {
-			prop.load(new FileInputStream(nomArch));
-			driver 	= prop.getProperty("driver");
-			url 	= prop.getProperty("url");
-			usuario = prop.getProperty("usuario");
-			pass 	= prop.getProperty("password");
-			
-		} catch (IOException e) {
-			throw new ExcepcionGenerica("Error al leer archivo de conexion DN01, contacte al administrador");
-		}
-		
-		if (driver == null || url == null || usuario == null || pass == null)
-			System.out.println("Error al leer archivo de conexion DN02, contacte al administrador");
-		
-		/* 1. cargo dinamicamente el driver de MySQL */
-		try {
-			Class.forName(driver);
-		} catch (ClassNotFoundException e) {
-			throw new ExcepcionPersistencia("Error en carga de driver DN03, contacte al administrador");
-		}		
+
 	}
 	
-	public boolean member(int cedula) throws ExcepcionPersistencia {
+	public boolean member(IConexion icon, int cedula) throws ExcepcionPersistencia {
 		boolean existe = false;
 		try {
-			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Connection con = ((Conexion) icon).getConection();
 			Consultas consu = new Consultas();
 			String query = consu.existeNino();
 			PreparedStatement pstmt = con.prepareStatement(query);
@@ -69,7 +35,6 @@ public class DAONinos {
 				existe = true;
 			
 			pstmt.close();
-			con.close();
 			
 		}catch (SQLException e) {
 			throw new ExcepcionPersistencia("Error al acceder a los datos DN04");
@@ -78,9 +43,9 @@ public class DAONinos {
 		return existe;
 	}
 	
-	public void insert (Nino nino) throws ExcepcionPersistencia {
+	public void insert (IConexion icon,Nino nino) throws ExcepcionPersistencia {
 		try {
-			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Connection con = ((Conexion) icon).getConection();
 			Consultas consu = new Consultas();
 			String query = consu.insertoNino();
 			
@@ -92,17 +57,16 @@ public class DAONinos {
 			pstmt.executeUpdate();
 			
 			pstmt.close();
-			con.close();
 		}catch (SQLException e) {
 			throw new ExcepcionPersistencia("Error al acceder a los datos DN05");
 		}
 		
 	}
 	
-	public Nino find(int ci) throws ExcepcionGenerica, ExcepcionPersistencia {
+	public Nino find(IConexion icon,int ci) throws ExcepcionGenerica, ExcepcionPersistencia {
 		Nino n = null;
 		try {
-			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Connection con = ((Conexion) icon).getConection();
 			Consultas consu = new Consultas();
 			String query = consu.existeNino();
 			PreparedStatement pstmt = con.prepareStatement(query);
@@ -111,9 +75,7 @@ public class DAONinos {
 			if (rs.next())
 				n = new Nino(rs.getInt(1),rs.getString(2),rs.getString(3));
 			
-			pstmt.close();
-			con.close();
-			
+			pstmt.close();			
 		}catch (SQLException e) {
 			throw new ExcepcionPersistencia("Error al acceder a los datos DN06");
 		}
@@ -121,9 +83,9 @@ public class DAONinos {
 	}
 	
 	//Precondicion, borrar primero los juguetes del nino
-	public void delete(int ci) throws ExcepcionPersistencia {
+	public void delete(IConexion icon,int ci) throws ExcepcionPersistencia {
 		try {
-			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Connection con = ((Conexion) icon).getConection();
 			Consultas consu = new Consultas();
 			String query = consu.borrarNino();
 			
@@ -132,16 +94,15 @@ public class DAONinos {
 			
 			pstmt.executeUpdate();
 			pstmt.close();
-			con.close();
 		}catch (SQLException e) {
 			throw new ExcepcionPersistencia("Error al acceder a los datos DN07");
 		}
 	}
 	
-	public List<VONino> listarNinos() throws ExcepcionPersistencia{
+	public List<VONino> listarNinos(IConexion icon) throws ExcepcionPersistencia{
 		List<VONino> lista = new ArrayList<VONino>();
 		try {
-			Connection con = DriverManager.getConnection (url,usuario,pass);
+			Connection con = ((Conexion) icon).getConection();
 			Consultas consu = new Consultas();
 			String query = consu.listoNino();
 
@@ -154,7 +115,7 @@ public class DAONinos {
 			
 			rs.close();
 			stmt.close();
-			con.close();
+			
 		}catch (SQLException e) {
 			throw new ExcepcionPersistencia("Error al acceder a los datos DN08");
 		}

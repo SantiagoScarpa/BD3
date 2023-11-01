@@ -23,7 +23,7 @@ public class PoolConexiones implements IPoolConexiones{
 	private int creadas;
 	private int tope;
 	
-	public PoolConexiones() {
+	public PoolConexiones() throws ExcepcionPersistencia {
 		Properties prop = new Properties();
 		String nomArch = "config/config.properties.txt";
 		driver = null;
@@ -33,19 +33,19 @@ public class PoolConexiones implements IPoolConexiones{
 		try {
 			prop.load(new FileInputStream(nomArch));
 			driver 		= prop.getProperty("driver");
-			url 		= prop.getProperty("urlBD");
+			url 		= prop.getProperty("url");
 			user 		= prop.getProperty("usuario");
 			password 	= prop.getProperty("password");
 		} catch (IOException e) {
-			System.out.println("Error al leer archivo de conexion P01, contacte al administrador");
+			throw new ExcepcionPersistencia("Error al leer archivo de conexion P01, contacte al administrador");
 		}
 		if (driver == null || url == null || user == null || password == null)
-			System.out.println("Error al leer archivo de conexion P02, contacte al administrador");
+			throw new ExcepcionPersistencia("Error al leer archivo de conexion P02, contacte al administrador");
 		
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {
-			System.out.println("ERROR - Pool Conexiones P03");
+			throw new ExcepcionPersistencia("ERROR - Pool Conexiones P03");
 		}
 		
 		nivelTransaccionalidad = 8;
@@ -73,14 +73,12 @@ public class PoolConexiones implements IPoolConexiones{
 						resu =new Conexion(con);
 					} catch (SQLException e) {
 						throw new ExcepcionPersistencia("Error al conectarse a los datos - P04");
-						//JOptionPane.showMessageDialog (null, "Error al conectarse a los datos - P04", "Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 					}
 				}else {
 					try {
 						this.wait();
 					} catch (InterruptedException e) {
 						throw new ExcepcionPersistencia("Error de conexion P05");
-						// JOptionPane.showMessageDialog (null, "Error P05", "Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
@@ -89,16 +87,19 @@ public class PoolConexiones implements IPoolConexiones{
 	} 
 	
 	public synchronized void liberarConexion(IConexion con, boolean ok) throws ExcepcionPersistencia {
-		conexiones[tope] = (Conexion) con;
-		tope++;
-		try {
-			if(ok) {
-				((Conexion) con).getConection().commit();
-			}else {
-				((Conexion) con).getConection().rollback();
-			}			
-		} catch (SQLException e) {
-			throw new ExcepcionPersistencia("Error al conectarse a los datos - P06");
+		if(con != null) {
+			conexiones[tope] = (Conexion) con;
+			tope++;
+			try {
+				if(ok) {
+					((Conexion) con).getConection().commit();
+				}else {
+					((Conexion) con).getConection().rollback();
+				}			
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new ExcepcionPersistencia("Error al conectarse a los datos - P06");
+			}
 		}
 		this.notifyAll();
 	}
