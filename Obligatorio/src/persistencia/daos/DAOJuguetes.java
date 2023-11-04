@@ -16,7 +16,7 @@ import persistencia.poolConexiones.Conexion;
 import persistencia.poolConexiones.IConexion;
 
 
-public class DAOJuguetes {
+public class DAOJuguetes implements IDAOJuguetes {
 	
 	private int cedulaNino;
 	

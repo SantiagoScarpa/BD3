@@ -80,10 +80,7 @@ public class PoolConexionesArchivo implements IPoolConexiones{
 
 	@Override
 	public void liberarConexion(IConexion con, boolean ok) throws ExcepcionPersistencia {
-		if(ok) {
-			// A CHECKEAR
-		}
-		
+			
 		if(escribiendo) {
 			terminoEscritura();
 		}else {

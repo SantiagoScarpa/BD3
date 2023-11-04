@@ -6,13 +6,14 @@ import logica.excepciones.ExcepcionGenerica;
 import logica.excepciones.ExcepcionPersistencia;
 import logica.valueObjects.VOJuguete2;
 import persistencia.daos.DAOJuguetes;
+import persistencia.daos.IDAOJuguetes;
 import persistencia.poolConexiones.IConexion;
 
 public class Nino {
 	private int cedula;
 	private String nombre;
 	private String apellido;
-	private DAOJuguetes secuencia;
+	private IDAOJuguetes secuencia;
 	
 	public Nino(int ci, String nom, String ape) throws ExcepcionGenerica, ExcepcionPersistencia {
 		cedula = ci;

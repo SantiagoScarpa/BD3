@@ -19,13 +19,14 @@ import logica.valueObjects.VOJuguete2;
 import logica.valueObjects.VONino;
 import logica.IFachada;
 import persistencia.daos.DAONinos;
+import persistencia.daos.IDAONinos;
 import persistencia.poolConexiones.IConexion;
 import persistencia.poolConexiones.IPoolConexiones;
 import persistencia.poolConexiones.PoolConexiones;
 
 public class Fachada extends UnicastRemoteObject implements IFachada {
 	private static Fachada instancia;
-	private DAONinos daoN;
+	private IDAONinos daoN;
 	private IPoolConexiones ipool;
 	
 	private Fachada() throws RemoteException, ExcepcionPersistencia, ExcepcionGenerica {

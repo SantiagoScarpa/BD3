@@ -16,7 +16,7 @@ import persistencia.poolConexiones.Conexion;
 import persistencia.consultas.Consultas;
 import persistencia.poolConexiones.IConexion;
 
-public class DAONinos {
+public class DAONinos implements IDAONinos {
 	
 	public DAONinos() throws ExcepcionPersistencia, ExcepcionGenerica {
 
