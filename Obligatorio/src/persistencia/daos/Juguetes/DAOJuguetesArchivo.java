@@ -214,6 +214,7 @@ public class DAOJuguetesArchivo implements IDAOJuguetes {
 	@Override
 	public void borrarJuguetes(IConexion icon) throws ExcepcionPersistencia {
 		Path borrado = Paths.get(nombreArchivo);
+				
 		try {
 			Files.delete(borrado);
 		} catch (IOException e) {
