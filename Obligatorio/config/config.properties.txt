@@ -6,3 +6,4 @@ password	= root
 ip 			= localhost
 port		= 81
 poolConexion= persistencia.poolConexiones.PoolConexiones
+FilesPath	= persistenciaArchivos/

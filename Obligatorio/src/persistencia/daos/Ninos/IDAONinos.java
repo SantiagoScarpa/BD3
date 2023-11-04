@@ -1,4 +1,4 @@
-package persistencia.daos;
+package persistencia.daos.Ninos;
 
 import java.util.List;
 

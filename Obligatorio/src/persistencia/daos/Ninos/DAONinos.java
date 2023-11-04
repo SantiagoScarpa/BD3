@@ -1,4 +1,4 @@
-package persistencia.daos;
+package persistencia.daos.Ninos;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +18,7 @@ import persistencia.poolConexiones.IConexion;
 
 public class DAONinos implements IDAONinos {
 	
-	public DAONinos() throws ExcepcionPersistencia, ExcepcionGenerica {
+	public DAONinos(){
 
 	}
 	

@@ -5,8 +5,8 @@ import java.util.List;
 import logica.excepciones.ExcepcionGenerica;
 import logica.excepciones.ExcepcionPersistencia;
 import logica.valueObjects.VOJuguete2;
-import persistencia.daos.DAOJuguetes;
-import persistencia.daos.IDAOJuguetes;
+import persistencia.daos.Juguetes.DAOJuguetes;
+import persistencia.daos.Juguetes.IDAOJuguetes;
 import persistencia.poolConexiones.IConexion;
 
 public class Nino {

@@ -1,4 +1,4 @@
-package persistencia.daos;
+package persistencia.daos.Juguetes;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
