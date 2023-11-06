@@ -1,6 +1,12 @@
 package logica;
 
-public class Juguete {
+import java.io.Serializable;
+
+public class Juguete implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int numero;
 	private String descripcion;
 	

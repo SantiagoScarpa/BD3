@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,7 +23,11 @@ import logica.excepciones.ExcepcionPersistencia;
 import logica.valueObjects.VONino;
 import persistencia.poolConexiones.IConexion;
 
-public class DAONinosArchivo implements IDAONinos{
+public class DAONinosArchivo implements IDAONinos, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String nombreRuta;
 	
 	public DAONinosArchivo() throws ExcepcionPersistencia {
@@ -83,14 +88,14 @@ public class DAONinosArchivo implements IDAONinos{
 		try {
 			FileInputStream f = new FileInputStream(nombreArchivo);
 			ObjectInputStream o = new ObjectInputStream(f);
-			
-			
+						
 			resu = (Nino) o.readObject();
 			o.close();
 			f.close();
 		} catch (FileNotFoundException e) {
 			throw new ExcepcionPersistencia("Error de persistencia, contacte al administrador - DNA02");
 		} catch (IOException e) {
+			e.printStackTrace();
 			throw new ExcepcionPersistencia("Error de persistencia, contacte al administrador - DNA03");
 		} catch (ClassNotFoundException e) {
 			throw new ExcepcionPersistencia("Error de persistencia, contacte al administrador - DNA04");

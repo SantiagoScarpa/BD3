@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -20,11 +21,15 @@ import logica.excepciones.ExcepcionPersistencia;
 import logica.valueObjects.VOJuguete2;
 import persistencia.poolConexiones.IConexion;
 
-public class DAOJuguetesArchivo implements IDAOJuguetes {
+public class DAOJuguetesArchivo implements IDAOJuguetes, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int cedulaNino;
 	private String nombreArchivo;
 	
-	private DAOJuguetesArchivo(int ci) throws ExcepcionPersistencia {
+	public DAOJuguetesArchivo(int ci) throws ExcepcionPersistencia {
 		cedulaNino = ci;
 			
 		//CREO ARCHIVO DE JUGUETES DE ESE NINO OBTENIENDO LA RUTA DEL CONFIG FILE

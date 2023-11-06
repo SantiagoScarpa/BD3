@@ -18,6 +18,7 @@ import logica.valueObjects.VOJuguete;
 import logica.valueObjects.VOJuguete2;
 import logica.valueObjects.VONino;
 import logica.IFachada;
+import persistencia.FabricaAbstracta;
 import persistencia.daos.Ninos.DAONinos;
 import persistencia.daos.Ninos.IDAONinos;
 import persistencia.poolConexiones.IConexion;
@@ -30,25 +31,33 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 	private IPoolConexiones ipool;
 	
 	private Fachada() throws RemoteException, ExcepcionPersistencia, ExcepcionGenerica {
-		daoN = new DAONinos();
 		Properties prop = new Properties();
 		String nomArch = "config/config.properties.txt";
 		String poolConcreto=null;
+		String nomFabrica = null;
 		try {
 			prop.load(new FileInputStream(nomArch));
 			poolConcreto = prop.getProperty("poolConexion");
+			nomFabrica = prop.getProperty("fabricaNom");
 			
 		} catch (IOException e) {
 			throw new ExcepcionGenerica("Error al leer archivo de conexion F01, contacte al administrador");
 		}
 		
-		if (poolConcreto == null)
+		if (poolConcreto == null || nomFabrica == null)
 			throw new ExcepcionGenerica("Error al crear pool conexiones F01, contacte al administrador");
 		
 		try {
 			ipool = (IPoolConexiones) Class.forName(poolConcreto).newInstance();
 		}catch(InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 			throw new ExcepcionGenerica("Error al crear pool conexiones F02, contacte al administrador");
+		}
+		
+		try {
+			FabricaAbstracta fabrica = (FabricaAbstracta) Class.forName(nomFabrica).newInstance();
+			daoN = fabrica.crearIDAONinos();
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+			throw new ExcepcionGenerica("Error al crear pool conexiones F03, contacte al administrador");
 		}
 			
 	}

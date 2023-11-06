@@ -7,7 +7,7 @@ import logica.excepciones.ExcepcionPersistencia;
 import logica.valueObjects.VOJuguete2;
 import persistencia.poolConexiones.IConexion;
 
-public interface IDAOJuguetes {
+public interface IDAOJuguetes  {
 
 	int obtengoNumJuguete(IConexion icon, int ci) throws ExcepcionPersistencia;
 

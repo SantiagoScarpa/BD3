@@ -1,25 +1,54 @@
 package logica;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
+import java.util.Properties;
 
 import logica.excepciones.ExcepcionGenerica;
 import logica.excepciones.ExcepcionPersistencia;
 import logica.valueObjects.VOJuguete2;
-import persistencia.daos.Juguetes.DAOJuguetes;
+import persistencia.FabricaAbstracta;
 import persistencia.daos.Juguetes.IDAOJuguetes;
 import persistencia.poolConexiones.IConexion;
 
-public class Nino {
+public class Nino implements Serializable 	{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int cedula;
 	private String nombre;
 	private String apellido;
 	private IDAOJuguetes secuencia;
 	
 	public Nino(int ci, String nom, String ape) throws ExcepcionGenerica, ExcepcionPersistencia {
+		//PREGUNTAR SI ESTA BIEN
+		Properties prop = new Properties();
+		String nomArch = "config/config.properties.txt";
+		String nomFabrica = null;
+		try {
+			prop.load(new FileInputStream(nomArch));
+			nomFabrica = prop.getProperty("fabricaNom");
+			
+		} catch (IOException e) {
+			throw new ExcepcionGenerica("Error al leer archivo de conexion N01, contacte al administrador");
+		}
+		
+		if (nomFabrica == null)
+			throw new ExcepcionGenerica("Error al crear pool conexiones N02, contacte al administrador");
+		
+		try {
+			FabricaAbstracta fabrica = (FabricaAbstracta) Class.forName(nomFabrica).newInstance();
+			secuencia = fabrica.crearIDAOJuguetes(ci);
+		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+			throw new ExcepcionGenerica("Error al crear pool conexiones N03, contacte al administrador");
+		}
+			
 		cedula = ci;
 		nombre = nom;
 		apellido = ape;
-		secuencia = new DAOJuguetes(ci);
 	}
 
 	public int getCedula() {

@@ -16,11 +16,11 @@ import persistencia.poolConexiones.Conexion;
 import persistencia.poolConexiones.IConexion;
 
 
-public class DAOJuguetes implements IDAOJuguetes {
+public class DAOJuguetes implements IDAOJuguetes  {
 	
 	private int cedulaNino;
 	
-	public DAOJuguetes(int cedN) throws ExcepcionGenerica, ExcepcionPersistencia{
+	public DAOJuguetes(int cedN){
 		cedulaNino = cedN;
 	}
 	
