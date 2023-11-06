@@ -168,10 +168,12 @@ public class DAOJuguetesArchivo implements IDAOJuguetes, Serializable {
 				j = (LinkedList<Juguete>) o.readObject();
 				
 				//obtengo el juguete
-				itemJ = j.get(numJuguete);
+				itemJ = j.get(numJuguete-1); //le resto 1 por que el id es +1 en la fachada
 				
 			}catch (ClassNotFoundException e) {
 				throw new ExcepcionPersistencia("Error al conectarse con los datos - DJA10");
+			}catch(IndexOutOfBoundsException e) {
+				//si el indice no esta en linked list, no hago nada
 			}finally{
 				o.close();
 				f.close();

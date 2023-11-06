@@ -74,6 +74,10 @@ public class Nino implements Serializable 	{
 		return secuencia.largo(icon);
 	}
 	
+	public int obtengoNumJuguetes(IConexion icon) throws ExcepcionPersistencia {
+		return secuencia.largo(icon);
+	}
+	
 	public void addJuguete(IConexion icon, Juguete j) throws ExcepcionPersistencia {
 		secuencia.insback(icon, j);
 		

@@ -95,7 +95,8 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 			icon = ipool.obtenerConexion(true);
 			if(daoN.member(icon,ci)) {
 				Nino n = daoN.find(icon,ci);
-				int numJ = n.cantidadJuguetes(icon);
+				int numJ = n.obtengoNumJuguetes(icon);
+				System.out.println("numj="+numJ);
 				Juguete j = new Juguete(numJ+1,vJuguete.getDescripcion());
 				n.addJuguete(icon, j);
 				ipool.liberarConexion(icon, true);
