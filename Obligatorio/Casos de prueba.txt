@@ -1,0 +1,37 @@
+//AGREGAR EN LA CONTROLADORA QUE DESCRIPCION DE JUGUETE NO ESTE VACIO
+//AGREGAR EN LA CONTROLADORA QUE NOMBRE/APELLIDO DE NINO NO ESTE VACIO
+
+Agregar 2 Ninos 
+	Cedula: 1111
+	Nombre: Jhon
+	Apellido: Doe
+
+	Cedula: 2222
+	Nombre: Santiago
+	Apellido: Scarpa
+
+
+Agregamos juguetes a nino 1111
+	Descripcion: Buz Lightyear
+	Cedula: 1111
+	
+	Descripcion: Woody
+	Cedule: 1111
+
+Obtenemos Desc de Juguetes creados
+	Numero: 1
+	Cedula: 1111
+	
+	Numero: 1
+	Cedula: 2222
+
+Listar Ninos
+
+Listar Juguetes de 1111
+Listar Juguetes de 2222
+
+
+Borrar Nino 1111
+
+Listar Ninos
+Listar Juguete

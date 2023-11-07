@@ -33,29 +33,22 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 	private Fachada() throws RemoteException, ExcepcionPersistencia, ExcepcionGenerica {
 		Properties prop = new Properties();
 		String nomArch = "config/config.properties.txt";
-		String poolConcreto=null;
 		String nomFabrica = null;
 		try {
 			prop.load(new FileInputStream(nomArch));
-			poolConcreto = prop.getProperty("poolConexion");
 			nomFabrica = prop.getProperty("fabricaNom");
 			
 		} catch (IOException e) {
 			throw new ExcepcionGenerica("Error al leer archivo de conexion F01, contacte al administrador");
 		}
 		
-		if (poolConcreto == null || nomFabrica == null)
+		if (nomFabrica == null)
 			throw new ExcepcionGenerica("Error al crear pool conexiones F01, contacte al administrador");
-		
-		try {
-			ipool = (IPoolConexiones) Class.forName(poolConcreto).newInstance();
-		}catch(InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-			throw new ExcepcionGenerica("Error al crear pool conexiones F02, contacte al administrador");
-		}
-		
+				
 		try {
 			FabricaAbstracta fabrica = (FabricaAbstracta) Class.forName(nomFabrica).newInstance();
 			daoN = fabrica.crearIDAONinos();
+			ipool = fabrica.crearIPoolConexiones();
 		} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 			throw new ExcepcionGenerica("Error al crear pool conexiones F03, contacte al administrador");
 		}
@@ -96,7 +89,6 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 			if(daoN.member(icon,ci)) {
 				Nino n = daoN.find(icon,ci);
 				int numJ = n.obtengoNumJuguetes(icon);
-				System.out.println("numj="+numJ);
 				Juguete j = new Juguete(numJ+1,vJuguete.getDescripcion());
 				n.addJuguete(icon, j);
 				ipool.liberarConexion(icon, true);

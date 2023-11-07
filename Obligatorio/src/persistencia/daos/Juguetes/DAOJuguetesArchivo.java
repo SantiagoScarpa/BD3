@@ -169,7 +169,7 @@ public class DAOJuguetesArchivo implements IDAOJuguetes, Serializable {
 				
 				//obtengo el juguete
 				itemJ = j.get(numJuguete-1); //le resto 1 por que el id es +1 en la fachada
-				
+
 			}catch (ClassNotFoundException e) {
 				throw new ExcepcionPersistencia("Error al conectarse con los datos - DJA10");
 			}catch(IndexOutOfBoundsException e) {

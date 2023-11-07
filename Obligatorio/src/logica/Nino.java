@@ -24,7 +24,6 @@ public class Nino implements Serializable 	{
 	private IDAOJuguetes secuencia;
 	
 	public Nino(int ci, String nom, String ape) throws ExcepcionGenerica, ExcepcionPersistencia {
-		//PREGUNTAR SI ESTA BIEN
 		Properties prop = new Properties();
 		String nomArch = "config/config.properties.txt";
 		String nomFabrica = null;
