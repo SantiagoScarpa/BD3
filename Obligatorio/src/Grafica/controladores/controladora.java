@@ -51,6 +51,7 @@ public class controladora {
 			winPrincipal = new Principal();
 			winPrincipal.setControladora(this);
 			winPrincipal.setVisible(true);
+			cargoListaNino();
 			
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			throw new ExcepcionGenerica("Error de conexión al servidor, contacte al administrador ");
@@ -79,7 +80,7 @@ public class controladora {
 	//METODOS DE FUNCIONALIDADES
 	public void ingresoNuevoNino(String ciStr, String nom, String ape) {
 		try {
-			if (esNumerico(ciStr) && esAlfabetico(nom) && esAlfabetico(ape) && ciStr!="" && nom!="" && ape!="") {
+			if (esNumerico(ciStr) && esAlfabetico(nom) && esAlfabetico(ape) && !ciStr.isEmpty() && !nom.isEmpty() && !ape.isEmpty()) {
 				int ci = Integer.parseInt(ciStr);
 				VONino vNino = new VONino(ci,nom,ape);
 				fachada.nuevoNino(vNino);
@@ -103,7 +104,7 @@ public class controladora {
 	
 	public void ingresoNuevoJuguete(String desc, String ciStr) {
 		try {
-			if (esNumerico(ciStr) && ciStr!="" && desc!="") {
+			if (esNumerico(ciStr) && !ciStr.isEmpty() && !desc.isEmpty()) {
 				int ci = Integer.parseInt(ciStr);
 				VOJuguete vJuguete = new VOJuguete(desc, ci);
 				fachada.nuevoJuguete(vJuguete);
@@ -179,7 +180,7 @@ public class controladora {
 	public String darDescripcion(String ciStr, String numString) {
 		String desc = null; 
 		try {
-			if (esNumerico(ciStr) && esNumerico(numString) && ciStr!="" && numString!="") {
+			if (esNumerico(ciStr) && esNumerico(numString) && !ciStr.isEmpty() && !numString.isEmpty()) {
 				int ci = Integer.parseInt(ciStr);
 				int num = Integer.parseInt(numString);
 				desc = fachada.darDescripcion(ci, num);
@@ -203,7 +204,7 @@ public class controladora {
 
 	public void borrarNino(String ciStr) {
 		try {
-			if (esNumerico(ciStr) && ciStr!="") {
+			if (esNumerico(ciStr) && !ciStr.isEmpty()) {
 				int ci = Integer.parseInt(ciStr);
 				fachada.borrarNinoJuguetes(ci);
 				JOptionPane.showMessageDialog (null, "Niño borrado", "Peticion realizada", JOptionPane.INFORMATION_MESSAGE);	
