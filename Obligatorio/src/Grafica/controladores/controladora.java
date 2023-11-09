@@ -14,12 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import Grafica.ventanas.BorrarNino;
-import Grafica.ventanas.DescripcionJuguete;
-import Grafica.ventanas.ListaJuguetesNino;
-import Grafica.ventanas.ListaNinos;
-import Grafica.ventanas.NuevoJuguete;
-import Grafica.ventanas.NuevoNino;
+import Grafica.ventanas.Principal;
 import logica.excepciones.ExcepcionGenerica;
 import logica.excepciones.ExcepcionJuguete;
 import logica.excepciones.ExcepcionNino;
@@ -30,13 +25,9 @@ import logica.valueObjects.VOJuguete2;
 import logica.valueObjects.VONino;
 
 public class controladora {
+
 	private IFachada fachada;
-	private NuevoNino winNuevoNino;
-	private NuevoJuguete winNuevoJuguete;
-	private ListaNinos winListaNinos;
-	private BorrarNino winBorrarNino;
-	private DescripcionJuguete winDescJuguete;
-	private ListaJuguetesNino winListaJuguete;
+	private Principal winPrincipal;
 	
 	public controladora() throws ExcepcionPersistencia, ExcepcionGenerica {
 		try {
@@ -56,92 +47,51 @@ public class controladora {
 
 			String path = "//" + ip.trim() + ":" + port.trim() + "/practico4";
 			fachada = (IFachada) Naming.lookup(path);
-
-			winNuevoNino = new NuevoNino();
-			winNuevoNino.setControladora(this);
-			winNuevoNino.setVisible(true);
 			
-			winNuevoJuguete = new NuevoJuguete();
-			winNuevoJuguete.setControladora(this);
-			winNuevoJuguete.setVisible(false);
+			winPrincipal = new Principal();
+			winPrincipal.setControladora(this);
+			winPrincipal.setVisible(true);
 			
-			winListaNinos = new ListaNinos();
-			winListaNinos.setControladora(this);
-			winListaNinos.setVisible(false);
-			
-			winListaJuguete = new ListaJuguetesNino();
-			winListaJuguete.setControladora(this);
-			winListaJuguete.setVisible(false);
-			
-			winDescJuguete = new DescripcionJuguete();
-			winDescJuguete.setControladora(this);
-			winDescJuguete.setVisible(false);
-			
-			winBorrarNino = new BorrarNino();
-			winBorrarNino.setControladora(this);
-			winBorrarNino.setVisible(false);
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			throw new ExcepcionGenerica("Error de conexión al servidor, contacte al administrador ");
 		}
 	}
 	
-	//MANEJO VENTANAS
-	public void mostrarNuevoNino() {
-		cierroVentanas();
-		winNuevoNino.setVisible(true);
+	private boolean esNumerico(String texto) {
+		for (int i = 0; i < texto.length(); i++) {
+			char c = texto.charAt(i);
+			if (!(c >= '0' && c <= '9'))
+				return false;
+		}
+		return true;
 	}
 	
-	public void mostrarNuevoJuguete() {
-		cierroVentanas();
-		winNuevoJuguete.setVisible(true);	
-	}
-	
-	public void mostrarListaNino() {
-		cierroVentanas();
-		cargoListaNino();
-		winListaNinos.setVisible(true);
-	}
-	
-
-	public void mostrarBorrarNino() {
-		cierroVentanas();
-		winBorrarNino.setVisible(true);
-	}
-	
-	public void mostrarDescJuguete() {
-		cierroVentanas();
-		winDescJuguete.setVisible(true);
-	}
-	
-	public void mostrarListaJuguete() {
-		cierroVentanas();
-		winListaJuguete.setVisible(true);
-	}
-	
-	private void cierroVentanas() {
-		winNuevoNino.salir();
-		winNuevoJuguete.salir();
-		winListaNinos.salir();
-		winListaJuguete.salir();
-		winBorrarNino.salir();
-		winDescJuguete.salir();
+	private boolean esAlfabetico(String texto) {
+		for (int i = 0; i < texto.length(); i++) {
+			char c = texto.charAt(i);
+			if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == ' '))
+				return false;
+		}
+		return true;
 	}
 	
 	
 	//METODOS DE FUNCIONALIDADES
 	public void ingresoNuevoNino(String ciStr, String nom, String ape) {
-			
 		try {
-			int ci = Integer.parseInt(ciStr);
-			VONino vNino = new VONino(ci,nom,ape);
-			fachada.nuevoNino(vNino);
-			JOptionPane.showMessageDialog (null, "Nino creado", "Peticion realizada", JOptionPane.INFORMATION_MESSAGE);	
+			if (esNumerico(ciStr) && esAlfabetico(nom) && esAlfabetico(ape) && ciStr!="" && nom!="" && ape!="") {
+				int ci = Integer.parseInt(ciStr);
+				VONino vNino = new VONino(ci,nom,ape);
+				fachada.nuevoNino(vNino);
+				JOptionPane.showMessageDialog (null, "Niño creado", "Peticion realizada", JOptionPane.INFORMATION_MESSAGE);	
+				winPrincipal.resetNuevoNino();
+			} else
+				JOptionPane.showMessageDialog (null, "Los datos ingresados no son validos", "Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		} catch ( ExcepcionGenerica  e) {
 			// e.printStackTrace();
 			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		}catch(RemoteException e2) {
 			JOptionPane.showMessageDialog (null, "Error al ejecutar accion", "Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
-			
 		}catch(ExcepcionPersistencia e1) {
 			JOptionPane.showMessageDialog (null, e1.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		}catch(ExcepcionNino e3) {
@@ -153,20 +103,21 @@ public class controladora {
 	
 	public void ingresoNuevoJuguete(String desc, String ciStr) {
 		try {
-			int ci = Integer.parseInt(ciStr);
-			VOJuguete vJuguete = new VOJuguete(desc, ci);
-			fachada.nuevoJuguete(vJuguete);
-			JOptionPane.showMessageDialog (null, "Juguete creado", "Peticion realizada", JOptionPane.INFORMATION_MESSAGE);
+			if (esNumerico(ciStr) && ciStr!="" && desc!="") {
+				int ci = Integer.parseInt(ciStr);
+				VOJuguete vJuguete = new VOJuguete(desc, ci);
+				fachada.nuevoJuguete(vJuguete);
+				JOptionPane.showMessageDialog (null, "Juguete creado", "Peticion realizada", JOptionPane.INFORMATION_MESSAGE);
+				winPrincipal.resetNuevoJuguete();
+			} else
+				JOptionPane.showMessageDialog (null, "Los datos ingresados no son validos", "Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		} catch (RemoteException e) {
 			JOptionPane.showMessageDialog (null, "Error al conectar al servidor, contacte al administrador","Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		} catch (ExcepcionGenerica e) {
-			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		} catch (ExcepcionPersistencia e) {
-			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		} catch (ExcepcionNino e) {
-			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		}catch(NumberFormatException e4) {
 			JOptionPane.showMessageDialog (null, "CI debe tener un valor numerico","Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
@@ -184,7 +135,7 @@ public class controladora {
 				Object[] data = { j.getCedula(), j.getNombre(),j.getApellido()};
 				tblModel.addRow(data);
 			}
-			winListaNinos.cargarTabla(tblMen);
+			winPrincipal.cargarTablaNinos(tblMen);
 		}catch (ExcepcionGenerica e) {
 			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		}catch (RemoteException e) {
@@ -211,8 +162,7 @@ public class controladora {
 			}
 			if(lista.isEmpty())
 				JOptionPane.showMessageDialog (null, "No hay juguetes asignado a la ci","Ha ocurrido un error", JOptionPane.INFORMATION_MESSAGE);
-
-			winListaJuguete.cargarTabla(tblMen);
+			winPrincipal.cargarTablaJuguetes(tblMen);
 		}catch (ExcepcionGenerica e) {
 			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		}catch (RemoteException e) {
@@ -229,9 +179,12 @@ public class controladora {
 	public String darDescripcion(String ciStr, String numString) {
 		String desc = null; 
 		try {
-			int ci = Integer.parseInt(ciStr);
-			int num = Integer.parseInt(numString);
-			desc = fachada.darDescripcion(ci, num);
+			if (esNumerico(ciStr) && esNumerico(numString) && ciStr!="" && numString!="") {
+				int ci = Integer.parseInt(ciStr);
+				int num = Integer.parseInt(numString);
+				desc = fachada.darDescripcion(ci, num);
+			} else
+				JOptionPane.showMessageDialog (null, "Los datos ingresados no son validos", "Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		} catch (RemoteException e) {
 			JOptionPane.showMessageDialog (null, "Error al conectar al servidor, contacte al administrador","Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		} catch (ExcepcionPersistencia e) {
@@ -245,16 +198,18 @@ public class controladora {
 		}catch(NumberFormatException e4) {
 			JOptionPane.showMessageDialog (null, "CI y Numero deben tener un valor numerico","Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		}
-		
 		return desc;
 	}
 
 	public void borrarNino(String ciStr) {
 		try {
-			int ci = Integer.parseInt(ciStr);
-			fachada.borrarNinoJuguetes(ci);
-			JOptionPane.showMessageDialog (null, "Nino borrado", "Peticion realizada", JOptionPane.INFORMATION_MESSAGE);	
-			
+			if (esNumerico(ciStr) && ciStr!="") {
+				int ci = Integer.parseInt(ciStr);
+				fachada.borrarNinoJuguetes(ci);
+				JOptionPane.showMessageDialog (null, "Niño borrado", "Peticion realizada", JOptionPane.INFORMATION_MESSAGE);	
+				winPrincipal.resetBorrarNino();
+			} else
+				JOptionPane.showMessageDialog (null, "Los datos ingresados no son validos", "Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		}catch(NumberFormatException e) {
 			JOptionPane.showMessageDialog (null, "CI debe tener un valor numerico","Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		} catch (RemoteException e) {
@@ -266,6 +221,6 @@ public class controladora {
 		} catch (ExcepcionNino e) {
 			JOptionPane.showMessageDialog (null, e.darMensaje(),"Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
 		}
-		
 	}
+	
 }
