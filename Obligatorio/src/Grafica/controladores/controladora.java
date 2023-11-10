@@ -151,7 +151,7 @@ public class controladora {
 			int ci = Integer.parseInt(ciStr);
 			List<VOJuguete2> lista = new ArrayList<VOJuguete2>();
 			lista = fachada.listarJuguetes(ci);
-			String[] colMedHdr = { "NUMERO","DESCRIPCION","DUENO"};
+			String[] colMedHdr = { "NUMERO","DESCRIPCION","DUEÑO"};
 			DefaultTableModel tblModel = new DefaultTableModel(colMedHdr, 0);
 			JTable tblMen = new JTable(tblModel);
 			for (VOJuguete2 j : lista) {

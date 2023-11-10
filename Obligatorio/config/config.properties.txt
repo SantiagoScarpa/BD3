@@ -1,9 +1,10 @@
 driver		= com.mysql.jdbc.Driver
-urlSv 		= jdbc:mysql://localhost:3308
-url 		= jdbc:mysql://localhost:3308/Guarderia
+urlSv 		= jdbc:mysql://localhost:3306
+url 		= jdbc:mysql://localhost:3306/Guarderia
 usuario 	= root
-password	= root
+password	= mysql
 ip 			= localhost
 port		= 81
 fabricaNom	= persistencia.FabricaArchivo
+#fabricaNom	= persistencia.FabricaMySQL
 FilesPath	= persistenciaArchivos/

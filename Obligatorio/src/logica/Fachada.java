@@ -72,7 +72,7 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 			 ipool.liberarConexion(icon, true);
 		 }else {
 			 ipool.liberarConexion(icon, false); // libero conexion antes de lanzar exception
-			 throw new ExcepcionNino("Nino ya existe en el sistema");
+			 throw new ExcepcionNino("Niño ya existe en el sistema");
 		 }
 
 		}catch(ExcepcionPersistencia e) {
@@ -95,7 +95,7 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 
 			}else {
 				ipool.liberarConexion(icon, false); // libero conexion antes de lanzar exception
-				throw new ExcepcionNino("Nino no existe en el sistema");
+				throw new ExcepcionNino("Niño no existe en el sistema");
 			}
 		}catch(ExcepcionPersistencia e) {
 			ipool.liberarConexion(icon, false);
@@ -128,7 +128,7 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 				ipool.liberarConexion(icon, false);
 			}else {
 				ipool.liberarConexion(icon, false);
-				throw new ExcepcionNino("Nino no existe en el sistema");
+				throw new ExcepcionNino("Niño no existe en el sistema");
 			}
 		}catch(ExcepcionPersistencia e) {
 			ipool.liberarConexion(icon, false);
@@ -150,11 +150,11 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 					ipool.liberarConexion(icon, false);
 				}else {
 					ipool.liberarConexion(icon, false);
-					throw new ExcepcionJuguete("Nino no tiene juguete");
+					throw new ExcepcionJuguete("Juguete no encontrado");
 				}
 			}else {
 				ipool.liberarConexion(icon, false);
-				throw new ExcepcionNino("Nino no existe en el sistema");
+				throw new ExcepcionNino("Niño no existe en el sistema");
 			}
 		}catch(ExcepcionPersistencia e) {
 			ipool.liberarConexion(icon, false);
@@ -174,7 +174,7 @@ public class Fachada extends UnicastRemoteObject implements IFachada {
 				ipool.liberarConexion(icon, true);
 			}else {
 				ipool.liberarConexion(icon, false);
-				throw new ExcepcionNino("Nino no existe en el sistema");
+				throw new ExcepcionNino("Niño no existe en el sistema");
 			}
 		}catch(ExcepcionPersistencia e) {
 			ipool.liberarConexion(icon, false);
