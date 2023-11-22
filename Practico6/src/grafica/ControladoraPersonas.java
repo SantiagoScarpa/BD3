@@ -13,6 +13,7 @@ public class ControladoraPersonas {
 			fac = new Fachada();
 			winPrincipal = new VentanaPersonas();
 			winPrincipal.setControladora(this);
+			winPrincipal.setVisible(true);
 	}
 	
 	public void nuevaPersona(String ciStr, String nom, String edadStr) {

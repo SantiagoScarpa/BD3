@@ -94,4 +94,9 @@ public class VentanaPersonas {
 	public void setControladora(ControladoraPersonas c) {
 		con = c;
 	}
+	
+	public void setVisible(boolean b) {
+		frame.setVisible(b);
+	}
+	
 }
