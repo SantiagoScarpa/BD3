@@ -23,7 +23,6 @@ public class ControladoraPersonas {
 		try {
 			fac.nuevaPersona(vPer);
 		} catch (LogicaException | ExcepcionPersistencia e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

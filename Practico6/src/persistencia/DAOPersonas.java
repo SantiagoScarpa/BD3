@@ -12,8 +12,9 @@ import logica.Persona;
 import logica.VOPersona;
 
 public class DAOPersonas {
-	private EntityManagerFactory factory;
-	private EntityManager manager;
+	private EntityManagerFactory factory = null;
+	private EntityManager manager = null;
+
 	
 	public DAOPersonas() throws ExcepcionPersistencia {
 		try {
@@ -46,9 +47,12 @@ public class DAOPersonas {
 	}
 
 	public void insert(Persona p) throws ExcepcionPersistencia{
+		manager.getTransaction().begin();
 		try {
 			manager.persist(p);			
+			manager.getTransaction().commit();
 		}catch(Exception e) {
+			manager.getTransaction().rollback();
 			throw new ExcepcionPersistencia("error persistencia");
 		}
 	}

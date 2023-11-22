@@ -18,10 +18,12 @@ public class Fachada {
 	
 	public void nuevaPersona(VOPersona voP) throws LogicaException, ExcepcionPersistencia {
 		Persona p = new Persona(voP.getCedula(),voP.getNombre(),voP.getEdad());
-		if(!daoP.member(p.getCedula()))
+		if(!daoP.member(p.getCedula())) {
 			daoP.insert(p);
-		else
-			throw new LogicaException("error logica"); 
+		}
+		else {
+			throw new LogicaException("error logica");
+		} 
 	}
 	
 		
